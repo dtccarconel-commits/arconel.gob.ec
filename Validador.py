@@ -14,7 +14,7 @@ RUTA_OK_BASE = r"C:\Users\william.boconzaca\OneDrive - AGENCIA DE REGULACION Y C
 # ================= VALIDACIONES CAMPOS SQL =================
 
 DISTRIBUIDORAS = [
-    'CNEL EP Eficiencia Energética','CNEL EP Oficina Central','CNEL EP UN Bolívar',
+    'EE Santiago','CNEL EP Eficiencia Energética','CNEL EP Oficina Central','CNEL EP UN Bolívar',
     'CNEL EP UN El Oro','CNEL EP UN Esmeraldas','CNEL EP UN Guayaquil',
     'CNEL EP UN Guayas Los Ríos','CNEL EP UN Los Ríos','CNEL EP UN Manabí',
     'CNEL EP UN Milagro','CNEL EP UN Santa Elena','CNEL EP UN Santo Domingo',
