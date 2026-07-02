@@ -71,6 +71,34 @@ SERVICIOS = [
     "SCVE"
 ]
 
+
+CLAVES_DISTRIBUIDORAS = {
+
+    "CNEL EP Eficiencia Energética": "clave001",
+    "CNEL EP Oficina Central": "clave002",
+    "CNEL EP UN Bolívar": "clave003",
+    "CNEL EP UN El Oro": "clave004",
+    "CNEL EP UN Esmeraldas": "clave005",
+    "CNEL EP UN Guayaquil": "clave006",
+    "CNEL EP UN Guayas Los Ríos": "clave007",
+    "CNEL EP UN Los Ríos": "clave008",
+    "CNEL EP UN Manabí": "clave009",
+    "CNEL EP UN Milagro": "clave010",
+    "CNEL EP UN Santa Elena": "clave011",
+    "CNEL EP UN Santo Domingo": "clave012",
+    "CNEL EP UN Sucumbíos": "clave013",
+    "EE Ambato": "clave014",
+    "EE Azogues": "clave015",
+    "EE Centro Sur": "clave016",
+    "EE Cotopaxi": "clave017",
+    "EE Galápagos": "clave018",
+    "EE Norte": "clave019",
+    "EE Quito": "clave020",
+    "EE Riobamba": "clave021",
+    "EE Sur": "clave022"
+}
+
+
 # ================= LIMPIAR COLUMNAS =================
 
 def validar_duplicados(df, nombre_form):
@@ -799,6 +827,18 @@ archivo = st.file_uploader("**Por favor cargue su Formulario.xlsx**", type=["xls
 
 if archivo:
 
+    distribuidora_seleccionada = st.selectbox(
+        "🏢 Seleccione la distribuidora",
+        DISTRIBUIDORAS
+    )
+
+    clave_ingresada = st.text_input(
+        "🔑 Contraseña",
+        type="password"
+    )
+
+if archivo:
+
     EMPRESAS = [
         "CNEL EP Oficina Central",
         "EE Santiago",
@@ -866,7 +906,29 @@ if archivo:
 
     if st.button("🔍 Validar"):
 
+        # Validar contraseña vacía
+        if not clave_ingresada:
+            st.error("❌ Debe ingresar la contraseña.")
+            st.stop()
+
+        # Validar contraseña
+        if clave_ingresada != CLAVES_DISTRIBUIDORAS.get(
+            distribuidora_seleccionada
+        ):
+            st.error("❌ Contraseña incorrecta.")
+            st.stop()
+
+        # Validar distribuidora vs nombre del archivo
+        if not nombre.upper().startswith(
+            distribuidora_seleccionada.upper()
+        ):
+            st.error(
+                "❌ La distribuidora seleccionada no coincide con el nombre del archivo."
+            )
+            st.stop()
+
         try:
+
             with pd.ExcelFile(RUTA_TEMP) as xls:
 
                 faltantes = [h for h in FORMULARIOS if h not in xls.sheet_names]
