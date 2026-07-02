@@ -738,7 +738,7 @@ with col2:
     fila1_col1, fila1_col2 = st.columns(2)
 
     with fila1_col1:
-        with open("Instructivo_Formularios_Junio 2026.xlsx", "rb") as f:
+        with open("Instructivo_Formularios_Junio_2026.xlsx", "rb") as f:
             st.download_button(
                 "📖 Instructivo para el llenado de formularios",
                 f,
