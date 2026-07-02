@@ -74,7 +74,7 @@ SERVICIOS = [
 
 CLAVES_DISTRIBUIDORAS = {
 
-    "CNEL EP Eficiencia Energética": "clave001",
+    "CNEL EP Santiago": "clave001",
     "CNEL EP Oficina Central": "clave002",
     "CNEL EP UN Bolívar": "clave003",
     "CNEL EP UN El Oro": "clave004",
