@@ -24,7 +24,7 @@ DISTRIBUIDORAS = [
 
 ETAPA_FUNCIONAL = [
     'Subtransmisión','Distribución','Administración',
-    'Comercialización','Instalaciones de servicio al Cliente'
+    'Comercialización','Instalaciones de Servicio al Cliente'
 ]
 
 TIPO_GASTO = [
