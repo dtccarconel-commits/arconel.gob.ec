@@ -37,7 +37,7 @@ GRUPO_GASTO = [
 
 SN = ['Sí','No']
 ESTADO_PROYECTO = ['Iniciado','No iniciado','Paralizado','Finalizado']
-PERM_AMB = ['Certificados Ambientales','Licencias Ambientales','Registro Ambiental','No aplica']
+PERM_AMB = ['Certificados Ambientales','Licencia Ambiental','Registro Ambiental','No aplica']
 FUENTES = [
     "PLANREP Crédito",
     "PMD  Crédito",
