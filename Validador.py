@@ -956,7 +956,7 @@ if archivo:
                         ]:
                          errores_duplicados = validar_duplicados(df, hoja)
                         else:
-                            erroes_duplicados=[]
+                            errores_duplicados=[]
 
 
                         st.write(
