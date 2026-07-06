@@ -949,7 +949,16 @@ if archivo:
 
                     if hoja in VALIDADORES:
                         errores_validacion = VALIDADORES[hoja](df)
-                        errores_duplicados = validar_duplicados(df, hoja)
+
+                        if hoja not in [
+                            "FORM 2 GASTO AO&M-C SPEE",
+                            "FORM 6 GASTO AO&M SAPG"
+                        ]:
+                         errores_duplicados = validar_duplicados(df, hoja)
+                        else:
+                            erroes_duplicados=[]
+
+
                         st.write(
                             hoja,
                             "errores validación:",
