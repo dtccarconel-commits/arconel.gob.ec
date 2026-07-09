@@ -880,8 +880,7 @@ if archivo:
 
         if re.match(
             patron,
-            nombre,
-            flags=re.IGNORECASE
+            nombre
         ):
             valido = True
             break
