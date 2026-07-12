@@ -37,6 +37,16 @@ GRUPO_GASTO = [
 
 SN = ['Sí','No']
 ESTADO_PROYECTO = ['Iniciado','No iniciado','Paralizado','Finalizado']
+ETAPA_EJECUCION = [
+    "No iniciado 0%",
+    "Elaboración de pliegos 5%",
+    "Disponibilidad de pliegos 10%",
+    "Publicación del proceso 15%",
+    "Resolución de adjudicación 30%",
+    "Adjudicación y firma de contrato 40%",
+    "Acta de entrega - recepción 95%",
+    "En ejecución 41% - 90%",
+    "Registro contable 100%"]
 PERM_AMB = ['Certificado Ambiental','Licencia Ambiental','Registro Ambiental','No aplica']
 FUENTES = [
     "PLANREP Crédito",
@@ -198,6 +208,97 @@ def validar_numericos(df, columnas, nombre_form):
 
     return errores
 
+def validar_fechas(df, columnas, nombre_form):
+
+    errores = []
+
+    for i, row in df.iterrows():
+
+        for col in columnas:
+
+            if col not in df.columns:
+                continue
+
+            valor = str(row[col]).strip()
+
+            if valor == "":
+                continue
+
+            try:
+                pd.to_datetime(
+                    valor,
+                    dayfirst=True
+                )
+
+            except:
+
+                errores.append({
+                    **row.to_dict(),
+                    "Formulario": nombre_form,
+                    "Fila": i + 2,
+                    "Error": f"{col} no es una fecha válida"
+                })
+
+    return errores
+
+
+def validar_coherencia_fechas(df, nombre_form):
+
+    errores = []
+
+    for i, row in df.iterrows():
+
+        try:
+
+            inicio = pd.to_datetime(
+                row["fecha_inicio_proyecto"],
+                dayfirst=True
+            )
+
+            fin_plan = pd.to_datetime(
+                row["fecha_pro_fin_proyecto"],
+                dayfirst=True
+            )
+
+            if inicio > fin_plan:
+
+                errores.append({
+                    **row.to_dict(),
+                    "Formulario": nombre_form,
+                    "Fila": i + 2,
+                    "Error": "fecha_inicio_proyecto mayor a fecha_pro_fin_proyecto"
+                })
+
+        except:
+            pass
+
+        try:
+
+            inicio = pd.to_datetime(
+                row["fecha_inicio_proyecto"],
+                dayfirst=True
+            )
+
+            fin_real = pd.to_datetime(
+                row["fecha_fin_proyecto"],
+                dayfirst=True
+            )
+
+            if str(row["fecha_fin_proyecto"]).strip() != "" and inicio > fin_real:
+
+                errores.append({
+                    **row.to_dict(),
+                    "Formulario": nombre_form,
+                    "Fila": i + 2,
+                    "Error": "fecha_inicio_proyecto mayor a fecha_fin_proyecto"
+                })
+
+        except:
+            pass
+
+    return errores
+
+
 def validar_form2(df):
     errores = []
     for i, row in df.iterrows():
@@ -355,6 +456,27 @@ def validar_form3(df):
         )
     )
 
+    errores.extend(
+    validar_fechas(
+        df,
+        [
+            "fecha_inicio_proyecto",
+            "fecha_pro_fin_proyecto",
+            "fecha_fin_proyecto",
+            "fecha_perm_amb_planif",
+            "fecha_perm_amb_ejec"
+        ],
+        "FORM3"
+    )
+)
+    
+    errores.extend(
+    validar_coherencia_fechas(
+        df,
+        "FORM3"
+    )
+)
+
     columnas_numericas = [
 
         "avance_ejecucion_fisica",
@@ -372,7 +494,35 @@ def validar_form3(df):
         "pagado",
         "anticipo_no_amortizado",
         "empleos_generados",
-        "nro_personal_fem"
+        "nro_personal_fem",
+        "bd_planificado",
+        "bd_ejecutado",
+        "vcs_planificado",
+        "vcs_ejecutado",
+        "vss_planificado",
+        "vss_ejecutado",
+        "tv_planificado",
+        "tv_ejecutado",
+        "ln_planificado",
+        "ln_ejecutado",
+        "at_planificado",
+        "at_ejecutado",
+        "mt_planificado",
+        "mt_ejecutado",
+        "bt_planificado",
+        "bt_ejecutado",
+        "am_planificado",
+        "am_ejecutado",
+        "m_planificado",
+        "m_ejecutado",
+        "td_planificado",
+        "td_ejecutado",
+        "pitd_planificado",
+        "pitd_ejecutado",
+        "sdn_planificado",
+        "sdn_ejecutado",
+        "pisdn_planificado",
+        "pisdn_ejecutado"
     ]
 
     errores.extend(
@@ -420,6 +570,158 @@ def validar_decimal_generico(df, columna, nombre):
 
     return errores
 
+def validar_form4(df):
+
+    errores = []
+    for i, row in df.iterrows():
+        if row["proyecto_arrastre"] not in SN:
+            errores.append({
+            **row.to_dict(),
+            "Formulario": "FORM4",
+            "Fila": i + 2,
+            "Error": "proyecto_arrastre inválido"
+        })
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "distribuidora",
+            DISTRIBUIDORAS,
+            "FORM4"
+        )
+    )
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "estado_proyecto",
+            ESTADO_PROYECTO,
+            "FORM4"
+        )
+    )
+
+    errores.extend(
+    validar_catalogo(
+        df,
+        "etapa_funcional",
+        ETAPA_FUNCIONAL,
+        "FORM4"
+    )
+    )
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "perm_amb",
+            PERM_AMB,
+            "FORM4"
+        )
+    )
+
+    errores.extend(
+    validar_fechas(
+        df,
+        [
+            "fecha_inicio_proyecto",
+            "fecha_pro_fin_proyecto",
+            "fecha_fin_proyecto",
+            "fecha_permiso_planif",
+            "fecha_permiso_ejec"
+        ],
+        "FORM4"
+    )
+)
+    
+    errores.extend(
+    validar_coherencia_fechas(
+        df,
+        "FORM4"
+    )
+)
+
+    columnas_numericas = [
+
+        "avance_ejecucion_fisica",
+        "avance_ejecucion_total",
+
+        "presupuesto_codificado_arrastre",
+        "devengado_arrastre",
+        "pagado_arrastre",
+
+        "asignacion_inicial",
+        "reformas",
+        "presupuesto_codificado",
+
+        "pre_compromiso",
+        "compromiso",
+        "devengado",
+        "pagado",
+
+        "anticipo_no_amortizado",
+
+        "bd_planificado",
+        "bd_ejecutado",
+
+        "vcs_planificado",
+        "vcs_ejecutado",
+
+        "vss_planificado",
+        "vss_ejecutado",
+
+        "tv_planificado",
+        "tv_ejecutado",
+
+        "ln_planificado",
+        "ln_ejecutado",
+
+        "at_planificado",
+        "at_ejecutado",
+
+        "mt_planificado",
+        "mt_ejecutado",
+
+        "bt_planificado",
+        "bt_ejecutado",
+
+        "am_planificado",
+        "am_ejecutado",
+
+        "m_planificado",
+        "m_ejecutado",
+
+        "td_planificado",
+        "td_ejecutado",
+
+        "pitd_planificado",
+        "pitd_ejecutado",
+
+        "sdn_planificado",
+        "sdn_ejecutado",
+
+        "pisdn_planificado",
+        "pisdn_ejecutado",
+
+        "empleos_generados",
+        "nro_personal_fem"
+    ]
+
+    errores.extend(
+        validar_numericos(
+            df,
+            columnas_numericas,
+            "FORM4"
+        )
+    )
+
+    errores.extend(
+        validar_presupuesto(
+            df,
+            "FORM4"
+        )
+    )
+
+    return errores
+
 def validar_form7_sql(df):
 
     errores = []
@@ -434,6 +736,24 @@ def validar_form7_sql(df):
     )
 
     errores.extend(
+    validar_catalogo(
+        df,
+        "proyecto_calificado_ecostos",
+        SN,
+        "FORM7"
+    )
+)
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "etapa_ejecucion_proyecto",
+            ETAPA_EJECUCION,
+            "FORM7"
+        )
+    )
+
+    errores.extend(
         validar_catalogo(
             df,
             "estado_proyecto",
@@ -441,6 +761,25 @@ def validar_form7_sql(df):
             "FORM7"
         )
     )
+
+    errores.extend(
+    validar_fechas(
+        df,
+        [
+            "fecha_inicio_proyecto",
+            "fecha_pro_fin_proyecto",
+            "fecha_fin_proyecto"
+        ],
+        "FORM7"  # cambiar según corresponda
+    )
+)
+    
+    errores.extend(
+    validar_coherencia_fechas(
+        df,
+        "FORM7"  # cambiar según corresponda
+    )
+)
 
     for i, row in df.iterrows():
 
@@ -518,6 +857,124 @@ def validar_form7_sql(df):
     return errores
 
 
+def validar_form8(df):
+
+    errores = []
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "distribuidora",
+            DISTRIBUIDORAS,
+            "FORM8"
+        )
+    )
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "estado_proyecto",
+            ESTADO_PROYECTO,
+            "FORM8"
+        )
+    )
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "etapa_ejecucion_proyecto",
+            ETAPA_EJECUCION,
+            "FORM8"
+        )
+    )
+
+
+    errores.extend(
+        validar_fechas(
+            df,
+            [
+                "fecha_inicio_proyecto",
+                "fecha_pro_fin_proyecto",
+                "fecha_fin_proyecto"
+            ],
+            "FORM8"
+        )
+    )
+
+    errores.extend(
+        validar_coherencia_fechas(
+            df,
+            "FORM8"
+        )
+    )
+
+    for i, row in df.iterrows():
+
+        if row["proyecto_arrastre"] not in SN:
+
+            errores.append({
+                **row.to_dict(),
+                "Formulario": "FORM8",
+                "Fila": i + 2,
+                "Error": "proyecto_arrastre inválido"
+            })
+
+    columnas_numericas = [
+
+        "avance_ejecucion_fisica",
+        "avance_ejecucion_total",
+
+        "presupuesto_codificado_arrastre",
+        "devengado_arrastre",
+        "pagado_arrastre",
+
+        "asignacion_inicial",
+        "reformas",
+        "presupuesto_codificado",
+
+        "pre_compromiso",
+        "compromiso",
+        "devengado",
+        "pagado",
+
+        "anticipo_no_amortizado",
+
+        "ln_inst_potencia",
+        "ln_inst_cantidad",
+
+        "ln_reemp_potencia",
+        "ln_reemp_cantidad",
+
+        "lumin_inst_total",
+
+        "postes_nuev_número",
+        "postes_reemp_número",
+
+        "benef_dir_número",
+
+        "empleos_generados",
+        "nro_personal_fem"
+    ]
+
+    errores.extend(
+        validar_numericos(
+            df,
+            columnas_numericas,
+            "FORM8"
+        )
+    )
+
+    errores.extend(
+        validar_presupuesto(
+            df,
+            "FORM8"
+        )
+    )
+
+    return errores
+
+
+
 def validar_form9(df):
 
     errores = []
@@ -554,6 +1011,34 @@ def validar_form9(df):
             df,
             "estado_proyecto",
             ESTADO_PROYECTO,
+            "FORM9"
+        )
+    )
+
+    errores.extend(
+    validar_catalogo(
+        df,
+        "etapa_ejecucion_proyecto",
+        ETAPA_EJECUCION,
+        "FORM9"
+    )
+)
+    
+    errores.extend(
+        validar_fechas(
+            df,
+            [
+                "fecha_inicio_proyecto",
+                "fecha_pro_fin_proyecto",
+                "fecha_fin_proyecto"
+            ],
+            "FORM9"
+        )
+    )
+
+    errores.extend(
+        validar_coherencia_fechas(
+            df,
             "FORM9"
         )
     )
@@ -612,25 +1097,11 @@ def validar_form9(df):
 VALIDADORES = {
 
     "FORM 2 GASTO AO&M-C SPEE": validar_form2,
-
     "FORM 3 ANUALIDAD ACTIVO SPEE": validar_form3,
-
     "FORM 9 OTROS RECURSOS": validar_form9,
-
-    "FORM 4 EXPANSION SPEE":
-        lambda df: validar_decimal_generico(
-            df,
-            "avance_ejecucion_fisica",
-            "FORM4"
-        ),
+    "FORM 4 EXPANSION SPEE": validar_form4,
     "FORM 6 GASTO AO&M SAPG": validar_form6,
-
-    "FORM 8 EXPANSION SAPG":
-        lambda df: validar_decimal_generico(
-            df,
-            "avance_ejecucion_fisica",
-            "FORM8"
-        )
+    "FORM 8 EXPANSION SAPG": validar_form8
 }
 
 VALIDADORES["FORM 7 ANUALIDAD ACTIVO SAPG"] = validar_form7_sql
