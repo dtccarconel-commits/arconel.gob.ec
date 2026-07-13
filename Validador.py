@@ -242,62 +242,6 @@ def validar_fechas(df, columnas, nombre_form):
     return errores
 
 
-def validar_coherencia_fechas(df, nombre_form):
-
-    errores = []
-
-    for i, row in df.iterrows():
-
-        try:
-
-            inicio = pd.to_datetime(
-                row["fecha_inicio_proyecto"],
-                dayfirst=True
-            )
-
-            fin_plan = pd.to_datetime(
-                row["fecha_pro_fin_proyecto"],
-                dayfirst=True
-            )
-
-            if inicio > fin_plan:
-
-                errores.append({
-                    **row.to_dict(),
-                    "Formulario": nombre_form,
-                    "Fila": i + 2,
-                    "Error": "fecha_inicio_proyecto mayor a fecha_pro_fin_proyecto"
-                })
-
-        except:
-            pass
-
-        try:
-
-            inicio = pd.to_datetime(
-                row["fecha_inicio_proyecto"],
-                dayfirst=True
-            )
-
-            fin_real = pd.to_datetime(
-                row["fecha_fin_proyecto"],
-                dayfirst=True
-            )
-
-            if str(row["fecha_fin_proyecto"]).strip() != "" and inicio > fin_real:
-
-                errores.append({
-                    **row.to_dict(),
-                    "Formulario": nombre_form,
-                    "Fila": i + 2,
-                    "Error": "fecha_inicio_proyecto mayor a fecha_fin_proyecto"
-                })
-
-        except:
-            pass
-
-    return errores
-
 
 def validar_form2(df):
     errores = []
@@ -470,12 +414,6 @@ def validar_form3(df):
     )
 )
     
-    errores.extend(
-    validar_coherencia_fechas(
-        df,
-        "FORM3"
-    )
-)
 
     columnas_numericas = [
 
@@ -631,13 +569,7 @@ def validar_form4(df):
         "FORM4"
     )
 )
-    
-    errores.extend(
-    validar_coherencia_fechas(
-        df,
-        "FORM4"
-    )
-)
+
 
     columnas_numericas = [
 
@@ -774,12 +706,6 @@ def validar_form7_sql(df):
     )
 )
     
-    errores.extend(
-    validar_coherencia_fechas(
-        df,
-        "FORM7"  # cambiar según corresponda
-    )
-)
 
     for i, row in df.iterrows():
 
@@ -901,12 +827,6 @@ def validar_form8(df):
         )
     )
 
-    errores.extend(
-        validar_coherencia_fechas(
-            df,
-            "FORM8"
-        )
-    )
 
     for i, row in df.iterrows():
 
@@ -1036,12 +956,6 @@ def validar_form9(df):
         )
     )
 
-    errores.extend(
-        validar_coherencia_fechas(
-            df,
-            "FORM9"
-        )
-    )
 
     for i, row in df.iterrows():
 
