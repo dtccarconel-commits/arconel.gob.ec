@@ -1362,7 +1362,8 @@ if archivo:
                 st.write("TOTAL ERRORES:", len(errores_totales))
 
                 if errores_totales:
-
+                    
+                    base = os.path.splitext(str(archivo.name))[0] 
                     nombre = f"errores_{archivo.name}"
 
                     errores_por_formulario = {}
