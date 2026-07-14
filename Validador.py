@@ -175,6 +175,39 @@ def validar_form1(df):
 
     return errores
 
+
+
+def validar_form5(df):
+
+    errores = []
+
+    for fila in range(df.shape[0]):
+        for col in range(df.shape[1]):
+
+            valor = str(df.iat[fila, col]).strip().lower()
+
+            if "anticipo_no_amortizado" in valor:
+
+                if col + 1 >= df.shape[1]:
+                    errores.append({
+                        "Formulario": "FORM5",
+                        "Error": "No existe la celda asociada a anticipo_no_amortizado"
+                    })
+                    return errores
+
+                valor_asociado = df.iat[fila, col + 1]
+
+                if str(valor_asociado).strip() == "":
+                    errores.append({
+                        "Formulario": "FORM5",
+                        "Error": "Debe registrar un valor para anticipo_no_amortizado"
+                    })
+
+                return errores
+
+    return errores
+
+
 def es_decimal(valor):
     try:
         float(valor)
@@ -1367,6 +1400,9 @@ if archivo:
 
                 df_form1 = pd.read_excel(xls,"FORM 1 GASTO AO&M-C SPEE",header=None,dtype=str).fillna("")
                 errores_totales.extend(validar_form1(df_form1))
+
+                df_form5 = pd.read_excel(xls,"FORM 5 GASTO AO&M SAPG",header=None,dtype=str).fillna("")
+                errores_totales.extend(validar_form5(df_form5))
 
                 for hoja, columnas in FORMULARIOS.items():
 
