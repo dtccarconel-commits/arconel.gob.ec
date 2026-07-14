@@ -146,6 +146,35 @@ def validar_columnas(df, columnas_correctas):
 
 # ================= VALIDACIONES =================
 
+def validar_form1(df):
+
+    errores = []
+
+    for fila in range(df.shape[0]):
+        for col in range(df.shape[1]):
+
+            valor = str(df.iat[fila, col]).strip().lower()
+
+            if valor == "anticipo_no_amortizado":
+
+                valor_asociado = ""
+
+                if col + 2 < df.shape[1]:
+                    valor_asociado = df.iat[fila, col + 2]
+
+                if (
+                    pd.isna(valor_asociado)
+                    or str(valor_asociado).strip() == ""
+                ):
+                    errores.append({
+                        "Formulario": "FORM1",
+                        "Error": "Debe registrar un valor para anticipo_no_amortizado"
+                    })
+
+                return errores
+
+    return errores
+
 def es_decimal(valor):
     try:
         float(valor)
@@ -1335,6 +1364,9 @@ if archivo:
                     st.stop()
 
                 errores_totales = []
+
+                df_form1 = pd.read_excel(xls,"FORM 1 GASTO AO&M-C SPEE",header=None,dtype=str).fillna("")
+                errores_totales.extend(validar_form1(df_form1))
 
                 for hoja, columnas in FORMULARIOS.items():
 
