@@ -1364,7 +1364,7 @@ if archivo:
                 if errores_totales:
                     
                     base = os.path.splitext(str(archivo.name))[0] 
-                    nombre = f"errores_{archivo.name}"
+                    nombre = f"errores_{archivo.name}.xlsx"
 
                     errores_por_formulario = {}
 
