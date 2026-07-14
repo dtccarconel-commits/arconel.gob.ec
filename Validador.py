@@ -145,50 +145,6 @@ def validar_columnas(df, columnas_correctas):
     return limpiar_columnas(df.columns) == limpiar_columnas(columnas_correctas)
 
 # ================= VALIDACIONES =================
-def validar_form1(df):
-
-    errores = []
-
-    encontrado = False
-
-    for fila in range(len(df)):
-        for col in range(len(df.columns)):
-
-            valor = str(df.iat[fila, col]).strip().lower()
-
-            if valor == "anticipo_no_amortizado":
-
-                encontrado = True
-
-                try:
-                    valor_asociado = df.iat[fila, col + 2]
-
-                    if (
-                        pd.isna(valor_asociado)
-                        or str(valor_asociado).strip() == ""
-                    ):
-                        errores.append({
-                            "Formulario": "FORM1",
-                            "Fila": fila + 1,
-                            "Error": "anticipo_no_amortizado no tiene valor asociado"
-                        })
-
-                except IndexError:
-                    errores.append({
-                        "Formulario": "FORM1",
-                        "Fila": fila + 1,
-                        "Error": "No existe la celda donde debe estar el valor de anticipo_no_amortizado"
-                    })
-
-                return errores
-
-    if not encontrado:
-        errores.append({
-            "Formulario": "FORM1",
-            "Error": "No se encontró la fila anticipo_no_amortizado"
-        })
-
-    return errores
 
 def es_decimal(valor):
     try:
@@ -1053,7 +1009,7 @@ def validar_form9(df):
 # ================= VALIDADORES =================
 
 VALIDADORES = {
-    "FORM 1 GASTO AO&M-C SPEE": validar_form1,
+
     "FORM 2 GASTO AO&M-C SPEE": validar_form2,
     "FORM 3 ANUALIDAD ACTIVO SPEE": validar_form3,
     "FORM 9 OTROS RECURSOS": validar_form9,
@@ -1358,8 +1314,22 @@ if archivo:
         try:
 
             with pd.ExcelFile(RUTA_TEMP) as xls:
+                
+                FORMULARIOS_OBLIGATORIOS = [
+                "FORM 1 GASTO AO&M-C SPEE",
+                "FORM 2 GASTO AO&M-C SPEE",
+                "FORM 3 ANUALIDAD ACTIVO SPEE",
+                "FORM 4 EXPANSION SPEE",
+                "FORM 5 GASTO AO&M SAPG",
+                "FORM 6 GASTO AO&M SAPG",
+                "FORM 7 ANUALIDAD ACTIVO SAPG",
+                "FORM 8 EXPANSION SAPG",
+                "FORM 9 OTROS RECURSOS"
+                ]
 
-                faltantes = [h for h in FORMULARIOS if h not in xls.sheet_names]
+
+
+                faltantes = [h for h in FORMULARIOS_OBLIGATORIOS if h not in xls.sheet_names]
                 if faltantes:
                     st.error(f"❌ Faltan formularios: {', '.join(faltantes)}")
                     st.stop()
