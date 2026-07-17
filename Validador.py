@@ -1407,7 +1407,8 @@ if archivo:
                 formulario = err["Formulario"]
                 if formulario not in errores_excel_por_formulario:
                     errores_excel_por_formulario[formulario] = 0
-                    errores_excel_por_formulario[formulario] += 1
+                
+                errores_excel_por_formulario[formulario] += 1
 
 
 
