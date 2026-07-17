@@ -1403,7 +1403,7 @@ if archivo:
 
                 for hoja, columnas in FORMULARIOS.items():
                     df = pd.read_excel(xls,hoja,dtype=str,keep_default_na=False)
-                    st.write(df.iloc[4])
+                    st.write(df.iloc[5])
 
 
                     # ✅ VALIDACIÓN DE COLUMNAS:
