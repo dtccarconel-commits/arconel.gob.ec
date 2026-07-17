@@ -296,6 +296,11 @@ def validar_fechas(df, columnas, nombre_form):
 
             if col not in df.columns:
                 continue
+            st.write(
+                f"Fila {i+2}, columna {col}:",
+                repr(row[col])
+            )
+
 
             valor = str(row[col]).strip()
 
