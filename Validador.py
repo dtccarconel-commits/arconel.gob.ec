@@ -165,7 +165,7 @@ def validar_errores_excel(ruta_excel):
                     errores.append({
                         "Formulario": hoja.title,
                         "Fila": celda.row,
-                        "Error": f"Error de Excel {celda.value} en {celda.coordinate}"
+                        "Error": f"Errores de validación de Excel: {celda.value} en {celda.coordinate}"
                     })
 
     return errores
