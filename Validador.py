@@ -5,7 +5,7 @@ import shutil
 import requests
 import base64
 import re
-
+from openpyxl import load_workbook
 
 RUTA_TEMP = "temp.xlsx"
 
@@ -143,6 +143,32 @@ def limpiar_columnas(cols):
 
 def validar_columnas(df, columnas_correctas):
     return limpiar_columnas(df.columns) == limpiar_columnas(columnas_correctas)
+
+
+def validar_errores_excel(ruta_excel):
+
+    errores = []
+
+    wb = load_workbook(
+        ruta_excel,
+        data_only=False
+    )
+
+    for hoja in wb.worksheets:
+
+        for fila in hoja.iter_rows():
+
+            for celda in fila:
+
+                if celda.data_type == "e":
+
+                    errores.append({
+                        "Formulario": hoja.title,
+                        "Fila": celda.row,
+                        "Error": f"Error de Excel {celda.value} en {celda.coordinate}"
+                    })
+
+    return errores
 
 # ================= VALIDACIONES =================
 
@@ -1371,8 +1397,11 @@ if archivo:
             st.stop()
 
         try:
-
+            errores_totales = []
+            # Validamos los errores de Excel (#REF!, #N/A, #VALUE!, etc.), pues estos caracteres son identificados como vacios
+            errores_totales.extend(validar_errores_excel(RUTA_TEMP))
             with pd.ExcelFile(RUTA_TEMP) as xls:
+
                 
                 FORMULARIOS_OBLIGATORIOS = [
                 "FORM 1 GASTO AO&M-C SPEE",
@@ -1393,7 +1422,6 @@ if archivo:
                     st.error(f"❌ Faltan formularios: {', '.join(faltantes)}")
                     st.stop()
 
-                errores_totales = []
 
                 df_form1 = pd.read_excel(xls,"FORM 1 GASTO AO&M-C SPEE",header=None,dtype=str).fillna("")
                 errores_totales.extend(validar_form1(df_form1))
