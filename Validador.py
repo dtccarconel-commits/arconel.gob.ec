@@ -1546,7 +1546,7 @@ if archivo:
                             json=payload
                             )
                     if r.ok:
-                        st.success("✅ Formularios validados correctamente. En breve recibirá un correo de confirmación.")
+                        st.success("✅ Formularios validados correctamente. En breve recibirá un correo de confirmación del estado de su carga.")
                     else:
                         st.error(f"❌ Error OneDrive: {r.status_code}")
 
