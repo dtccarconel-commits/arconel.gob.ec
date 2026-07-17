@@ -5,7 +5,7 @@ import shutil
 import requests
 import base64
 import re
-from openpyxl import load_workbook
+
 
 RUTA_TEMP = "temp.xlsx"
 
@@ -144,95 +144,7 @@ def limpiar_columnas(cols):
 def validar_columnas(df, columnas_correctas):
     return limpiar_columnas(df.columns) == limpiar_columnas(columnas_correctas)
 
-
-def validar_errores_excel(ruta_excel):
-
-    errores = []
-
-    wb = load_workbook(
-        ruta_excel,
-        data_only=False
-    )
-
-    for hoja in wb.worksheets:
-
-        for fila in hoja.iter_rows():
-
-            for celda in fila:
-
-                if celda.data_type == "e":
-
-                    errores.append({
-                        "Formulario": hoja.title,
-                        "Fila": celda.row,
-                        "Error": f"Errores de validación de Excel: {celda.value} en {celda.coordinate}"
-                    })
-
-    return errores
-
 # ================= VALIDACIONES =================
-
-def validar_form1(df):
-
-    errores = []
-
-    for fila in range(df.shape[0]):
-        for col in range(df.shape[1]):
-
-            valor = str(df.iat[fila, col]).strip().lower()
-
-            if valor == "anticipo_no_amortizado":
-
-                valor_asociado = ""
-
-                if col + 2 < df.shape[1]:
-                    valor_asociado = df.iat[fila, col + 2]
-
-                if (
-                    pd.isna(valor_asociado)
-                    or str(valor_asociado).strip() == ""
-                ):
-                    errores.append({
-                        "Formulario": "FORM1",
-                        "Error": "Debe registrar un valor para anticipo_no_amortizado"
-                    })
-
-                return errores
-
-    return errores
-
-
-
-def validar_form5(df):
-
-    errores = []
-
-    for fila in range(df.shape[0]):
-        for col in range(df.shape[1]):
-
-            valor = str(df.iat[fila, col]).strip().lower()
-
-            if "anticipo_no_amortizado" in valor:
-
-                if col + 1 >= df.shape[1]:
-                    errores.append({
-                        "Formulario": "FORM5",
-                        "Error": "No existe la celda asociada a anticipo_no_amortizado"
-                    })
-                    return errores
-
-                valor_asociado = df.iat[fila, col + 1]
-
-                if str(valor_asociado).strip() == "":
-                    errores.append({
-                        "Formulario": "FORM5",
-                        "Error": "Debe registrar un valor para anticipo_no_amortizado"
-                    })
-
-                return errores
-
-    return errores
-
 
 def es_decimal(valor):
     try:
@@ -300,22 +212,6 @@ def validar_fechas(df, columnas, nombre_form):
 
     errores = []
 
-    errores_excel = [
-        "#¡REF!",
-        "#REF!",
-        "#N/A",
-        "#¡N/D",
-        "#VALUE!",
-        "#NAME?",
-        "#¿NOMBRE?",
-        "#DIV/0!",
-        "#¡DIV/0!",
-        "#NULL!",
-        "#¡NULO!",
-        "#NUM!",
-        "#¡NUM!"
-]
-    
     for i, row in df.iterrows():
 
         for col in columnas:
@@ -345,6 +241,62 @@ def validar_fechas(df, columnas, nombre_form):
 
     return errores
 
+
+def validar_coherencia_fechas(df, nombre_form):
+
+    errores = []
+
+    for i, row in df.iterrows():
+
+        try:
+
+            inicio = pd.to_datetime(
+                row["fecha_inicio_proyecto"],
+                dayfirst=True
+            )
+
+            fin_plan = pd.to_datetime(
+                row["fecha_pro_fin_proyecto"],
+                dayfirst=True
+            )
+
+            if inicio > fin_plan:
+
+                errores.append({
+                    **row.to_dict(),
+                    "Formulario": nombre_form,
+                    "Fila": i + 2,
+                    "Error": "fecha_inicio_proyecto mayor a fecha_pro_fin_proyecto"
+                })
+
+        except:
+            pass
+
+        try:
+
+            inicio = pd.to_datetime(
+                row["fecha_inicio_proyecto"],
+                dayfirst=True
+            )
+
+            fin_real = pd.to_datetime(
+                row["fecha_fin_proyecto"],
+                dayfirst=True
+            )
+
+            if str(row["fecha_fin_proyecto"]).strip() != "" and inicio > fin_real:
+
+                errores.append({
+                    **row.to_dict(),
+                    "Formulario": nombre_form,
+                    "Fila": i + 2,
+                    "Error": "fecha_inicio_proyecto mayor a fecha_fin_proyecto"
+                })
+
+        except:
+            pass
+
+    return errores
 
 
 def validar_form2(df):
@@ -518,6 +470,12 @@ def validar_form3(df):
     )
 )
     
+    errores.extend(
+    validar_coherencia_fechas(
+        df,
+        "FORM3"
+    )
+)
 
     columnas_numericas = [
 
@@ -673,51 +631,76 @@ def validar_form4(df):
         "FORM4"
     )
 )
-
+    
+    errores.extend(
+    validar_coherencia_fechas(
+        df,
+        "FORM4"
+    )
+)
 
     columnas_numericas = [
 
         "avance_ejecucion_fisica",
         "avance_ejecucion_total",
+
         "presupuesto_codificado_arrastre",
         "devengado_arrastre",
         "pagado_arrastre",
+
         "asignacion_inicial",
         "reformas",
         "presupuesto_codificado",
+
         "pre_compromiso",
         "compromiso",
         "devengado",
         "pagado",
+
         "anticipo_no_amortizado",
+
         "bd_planificado",
         "bd_ejecutado",
+
         "vcs_planificado",
         "vcs_ejecutado",
+
         "vss_planificado",
         "vss_ejecutado",
+
         "tv_planificado",
         "tv_ejecutado",
+
         "ln_planificado",
         "ln_ejecutado",
+
         "at_planificado",
         "at_ejecutado",
+
         "mt_planificado",
         "mt_ejecutado",
+
         "bt_planificado",
         "bt_ejecutado",
+
         "am_planificado",
         "am_ejecutado",
+
         "m_planificado",
         "m_ejecutado",
+
         "td_planificado",
         "td_ejecutado",
+
         "pitd_planificado",
         "pitd_ejecutado",
+
         "sdn_planificado",
         "sdn_ejecutado",
+
         "pisdn_planificado",
         "pisdn_ejecutado",
+
         "empleos_generados",
         "nro_personal_fem"
     ]
@@ -791,6 +774,12 @@ def validar_form7_sql(df):
     )
 )
     
+    errores.extend(
+    validar_coherencia_fechas(
+        df,
+        "FORM7"  # cambiar según corresponda
+    )
+)
 
     for i, row in df.iterrows():
 
@@ -912,6 +901,12 @@ def validar_form8(df):
         )
     )
 
+    errores.extend(
+        validar_coherencia_fechas(
+            df,
+            "FORM8"
+        )
+    )
 
     for i, row in df.iterrows():
 
@@ -1041,6 +1036,12 @@ def validar_form9(df):
         )
     )
 
+    errores.extend(
+        validar_coherencia_fechas(
+            df,
+            "FORM9"
+        )
+    )
 
     for i, row in df.iterrows():
 
@@ -1209,7 +1210,7 @@ FORMULARIOS = {
 
 
 # *************************************************************
-# ***************** INTERFAZ APLICACIÓN WEB********************
+# ***************** INTERFAZ DE LA APLICACIÓN *****************
 # *************************************************************
 
 
@@ -1397,37 +1398,15 @@ if archivo:
             st.stop()
 
         try:
-            errores_totales = []
-            # Validamos los errores de Excel (#REF!, #N/A, #VALUE!, etc.), pues estos caracteres son identificados como vacios
-            errores_totales.extend(validar_errores_excel(RUTA_TEMP))
+
             with pd.ExcelFile(RUTA_TEMP) as xls:
 
-                
-                FORMULARIOS_OBLIGATORIOS = [
-                "FORM 1 GASTO AO&M-C SPEE",
-                "FORM 2 GASTO AO&M-C SPEE",
-                "FORM 3 ANUALIDAD ACTIVO SPEE",
-                "FORM 4 EXPANSION SPEE",
-                "FORM 5 GASTO AO&M SAPG",
-                "FORM 6 GASTO AO&M SAPG",
-                "FORM 7 ANUALIDAD ACTIVO SAPG",
-                "FORM 8 EXPANSION SAPG",
-                "FORM 9 OTROS RECURSOS"
-                ]
-
-
-
-                faltantes = [h for h in FORMULARIOS_OBLIGATORIOS if h not in xls.sheet_names]
+                faltantes = [h for h in FORMULARIOS if h not in xls.sheet_names]
                 if faltantes:
                     st.error(f"❌ Faltan formularios: {', '.join(faltantes)}")
                     st.stop()
 
-
-                df_form1 = pd.read_excel(xls,"FORM 1 GASTO AO&M-C SPEE",header=None,dtype=str).fillna("")
-                errores_totales.extend(validar_form1(df_form1))
-
-                df_form5 = pd.read_excel(xls,"FORM 5 GASTO AO&M SAPG",header=None,dtype=str).fillna("")
-                errores_totales.extend(validar_form5(df_form5))
+                errores_totales = []
 
                 for hoja, columnas in FORMULARIOS.items():
 
@@ -1469,9 +1448,8 @@ if archivo:
                 st.write("TOTAL ERRORES:", len(errores_totales))
 
                 if errores_totales:
-                    
-                    base = os.path.splitext(str(archivo.name))[0] 
-                    nombre = f"errores_{archivo.name}.xlsx"
+
+                    nombre = f"errores_{archivo.name}"
 
                     errores_por_formulario = {}
 
