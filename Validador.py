@@ -145,6 +145,7 @@ def validar_columnas(df, columnas_correctas):
     return limpiar_columnas(df.columns) == limpiar_columnas(columnas_correctas)
 
 
+
 def validar_errores_excel(ruta_excel):
 
     errores = []
@@ -165,10 +166,11 @@ def validar_errores_excel(ruta_excel):
                     errores.append({
                         "Formulario": hoja.title,
                         "Fila": celda.row,
-                        "Error": f"Dato inválido, errores en fórmula de Excel: {celda.value} en {celda.coordinate}"
+                        "Error": f"Dato inválido, error en fórmula Excel: {celda.value} en {celda.coordinate}"
                     })
 
     return errores
+
 
 # ================= VALIDACIONES =================
 
@@ -1399,7 +1401,22 @@ if archivo:
         try:
             errores_totales = []
             # Validamos los errores de Excel (#REF!, #N/A, #VALUE!, etc.), pues estos caracteres son identificados como vacios
-            errores_totales.extend(validar_errores_excel(RUTA_TEMP))
+            errores_excel = validar_errores_excel(RUTA_TEMP)
+            # Agregarlos al total
+            errores_totales.extend(errores_excel)
+            
+            
+            errores_excel_por_formulario = {}
+            
+            for err in errores_excel:
+                formulario = err["Formulario"]
+                
+                if formulario not in errores_excel_por_formulario:
+                    errores_excel_por_formulario[formulario] = 0
+                    
+                errores_excel_por_formulario[formulario] += 1
+
+
             with pd.ExcelFile(RUTA_TEMP) as xls:
 
                 
