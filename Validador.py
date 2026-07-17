@@ -1402,9 +1402,8 @@ if archivo:
                 errores_totales.extend(validar_form5(df_form5))
 
                 for hoja, columnas in FORMULARIOS.items():
-                    df = pd.read_excel(xls,hoja,dtype=str,keep_default_na=False)
-                    st.write(df.iloc[3])
 
+                    df = pd.read_excel(xls, hoja, dtype=str).fillna("")
 
                     # ✅ VALIDACIÓN DE COLUMNAS:
                     if not validar_columnas(df, columnas):
