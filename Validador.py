@@ -1471,19 +1471,19 @@ if archivo:
 
                         st.write(
                             hoja,
-                            "errores Excel:",
+                            "Total de errores de fórmulas Excel:",
                             errores_excel_hoja
                             )
 
                         st.write(
                             hoja,
-                            "errores validación:",
+                            "Total de errores de validación:",
                             len(errores_validacion)
                             )
                         
                         st.write(
                             hoja,
-                            "errores duplicados:",
+                            "Total de errores duplicados:",
                             len(errores_duplicados)
                             )
                         
