@@ -1399,19 +1399,7 @@ if archivo:
         try:
             errores_totales = []
             # Validamos los errores de Excel (#REF!, #N/A, #VALUE!, etc.), pues estos caracteres son identificados como vacios
-            errores_excel = validar_errores_excel(RUTA_TEMP)
-            errores_totales.extend(errores_excel)
-            
-            errores_excel_por_formulario = {}
-            for err in errores_excel:
-                formulario = err["Formulario"]
-                if formulario not in errores_excel_por_formulario:
-                    errores_excel_por_formulario[formulario] = 0
-                
-                errores_excel_por_formulario[formulario] += 1
-
-
-
+            errores_totales.extend(validar_errores_excel(RUTA_TEMP))
             with pd.ExcelFile(RUTA_TEMP) as xls:
 
                 
@@ -1452,8 +1440,6 @@ if archivo:
 
                     if hoja in VALIDADORES:
                         errores_validacion = VALIDADORES[hoja](df)
-                        errores_excel_hoja = errores_excel_por_formulario.get(hoja,0)
-
 
                         if hoja not in [
                             "FORM 2 GASTO AO&M-C SPEE",
@@ -1467,17 +1453,14 @@ if archivo:
                         st.write(
                             hoja,
                             "errores validación:",
-                            len(errores_validacion))
-                        
-                        st.write(
-                            hoja,
-                            "errores Excel:",
-                            errores_excel_hoja)
+                            len(errores_validacion)
+                            )
                         
                         st.write(
                             hoja,
                             "errores duplicados:",
-                            len(errores_duplicados))
+                            len(errores_duplicados)
+                            )
                         
                         errores_totales.extend(errores_validacion)
                         errores_totales.extend(errores_duplicados)
