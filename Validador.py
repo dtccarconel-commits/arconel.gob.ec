@@ -1457,6 +1457,9 @@ if archivo:
 
                     if hoja in VALIDADORES:
                         errores_validacion = VALIDADORES[hoja](df)
+                        
+                        errores_excel_hoja = errores_excel_por_formulario.get(hoja,0)
+
 
                         if hoja not in [
                             "FORM 2 GASTO AO&M-C SPEE",
@@ -1466,6 +1469,11 @@ if archivo:
                         else:
                             errores_duplicados=[]
 
+                        st.write(
+                            hoja,
+                            "errores Excel:",
+                            errores_excel_hoja
+                            )
 
                         st.write(
                             hoja,
