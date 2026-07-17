@@ -274,6 +274,22 @@ def validar_fechas(df, columnas, nombre_form):
 
     errores = []
 
+    errores_excel = [
+        "#¡REF!",
+        "#REF!",
+        "#N/A",
+        "#¡N/D",
+        "#VALUE!",
+        "#NAME?",
+        "#¿NOMBRE?",
+        "#DIV/0!",
+        "#¡DIV/0!",
+        "#NULL!",
+        "#¡NULO!",
+        "#NUM!",
+        "#¡NUM!"
+]
+    
     for i, row in df.iterrows():
 
         for col in columnas:
@@ -637,64 +653,45 @@ def validar_form4(df):
 
         "avance_ejecucion_fisica",
         "avance_ejecucion_total",
-
         "presupuesto_codificado_arrastre",
         "devengado_arrastre",
         "pagado_arrastre",
-
         "asignacion_inicial",
         "reformas",
         "presupuesto_codificado",
-
         "pre_compromiso",
         "compromiso",
         "devengado",
         "pagado",
-
         "anticipo_no_amortizado",
-
         "bd_planificado",
         "bd_ejecutado",
-
         "vcs_planificado",
         "vcs_ejecutado",
-
         "vss_planificado",
         "vss_ejecutado",
-
         "tv_planificado",
         "tv_ejecutado",
-
         "ln_planificado",
         "ln_ejecutado",
-
         "at_planificado",
         "at_ejecutado",
-
         "mt_planificado",
         "mt_ejecutado",
-
         "bt_planificado",
         "bt_ejecutado",
-
         "am_planificado",
         "am_ejecutado",
-
         "m_planificado",
         "m_ejecutado",
-
         "td_planificado",
         "td_ejecutado",
-
         "pitd_planificado",
         "pitd_ejecutado",
-
         "sdn_planificado",
         "sdn_ejecutado",
-
         "pisdn_planificado",
         "pisdn_ejecutado",
-
         "empleos_generados",
         "nro_personal_fem"
     ]
@@ -1186,7 +1183,7 @@ FORMULARIOS = {
 
 
 # *************************************************************
-# ***************** INTERFAZ DE LA APLICACIÓN *****************
+# ***************** INTERFAZ APLICACIÓN WEB********************
 # *************************************************************
 
 
