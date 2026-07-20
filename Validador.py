@@ -348,7 +348,7 @@ def validar_fechas(df, columnas, nombre_form):
     return errores
 
 
-
+##Validaciones del formulario 2 de ejecución de recursos
 def validar_form2(df):
     errores = []
     for i, row in df.iterrows():
@@ -356,19 +356,17 @@ def validar_form2(df):
         fila = i + 2
         error = ""
 
-        # SQL
         if row["distribuidora"] not in DISTRIBUIDORAS:
-            error += "distribuidora inválida; "
+            error += "Valor ingresado en distribuidora es inválido, use la lista desplegable; "
         if row["etapa_funcional"] not in ETAPA_FUNCIONAL:
-            error += "etapa_funcional inválido; "
+            error += "Valor etapa_funcional inválido, use la lista desplegable; "
         if row["tipo_gasto"] not in TIPO_GASTO:
-            error += "tipo_gasto inválido; "
+            error += "Valor en tipo_gasto inválido, use la lista desplegable; "
         if row["grupo_gasto"] not in GRUPO_GASTO:
-            error += "grupo_gasto inválido; "
+            error += "Vlor en grupo_gasto inválido, use la lista desplegable; "
 
-        # ORIGINAL
         if not str(row["nro_partida"]).isdigit():
-            error += "nro_partida inválido; "
+            error += "nro_partida inválido, ingrese únicamente valores numéricos; "
 
         for c in [
             "asignacion_inicial","reformas","presupuesto_codificado",
@@ -381,6 +379,10 @@ def validar_form2(df):
             errores.append({**row,"Formulario":"FORM2","Fila":fila,"Error":error})
 
     return errores
+
+
+
+
 
 def validar_form6(df):
 
