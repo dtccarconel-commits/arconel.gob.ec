@@ -1151,7 +1151,7 @@ def validar_form8(df):
             df,
             "distribuidora",
             DISTRIBUIDORAS,
-            "FORM8"
+            "Formulario 8_Errores de validación"
         )
     )
 
@@ -1160,7 +1160,7 @@ def validar_form8(df):
             df,
             "estado_proyecto",
             ESTADO_PROYECTO,
-            "FORM8"
+            "Formulario 8_Errores de validación"
         )
     )
 
@@ -1169,10 +1169,30 @@ def validar_form8(df):
             df,
             "etapa_ejecucion_proyecto",
             ETAPA_EJECUCION,
-            "FORM8"
+            "Formulario 8_Errores de validación"
         )
     )
 
+
+    errores.extend(
+    validar_codigo_numerico_texto(
+        df,
+        "codigo_proyecto_eed",
+        "Formulario 8_Errores de validación"
+    )
+    )
+
+
+    errores.extend(
+    validar_obligatorios(
+        df,
+        [
+            "nombre_proyecto",
+            "objeto_proyecto"
+        ],
+        "Formulario 8_Errores de validación"
+        )
+        )
 
     errores.extend(
         validar_fechas(
@@ -1182,7 +1202,7 @@ def validar_form8(df):
                 "fecha_pro_fin_proyecto",
                 "fecha_fin_proyecto"
             ],
-            "FORM8"
+            "Formulario 8_Errores de validación"
         )
     )
 
@@ -1193,44 +1213,33 @@ def validar_form8(df):
 
             errores.append({
                 **row.to_dict(),
-                "Formulario": "FORM8",
+                "Formulario": "Formulario 8_Errores de validación",
                 "Fila": i + 2,
                 "Error": "proyecto_arrastre inválido"
             })
 
     columnas_numericas = [
-
+        "anio_calificacion",
         "avance_ejecucion_fisica",
         "avance_ejecucion_total",
-
         "presupuesto_codificado_arrastre",
         "devengado_arrastre",
         "pagado_arrastre",
-
         "asignacion_inicial",
         "reformas",
         "presupuesto_codificado",
-
         "pre_compromiso",
         "compromiso",
         "devengado",
         "pagado",
-
         "anticipo_no_amortizado",
-
-        "ln_inst_potencia",
         "ln_inst_cantidad",
-
         "ln_reemp_potencia",
         "ln_reemp_cantidad",
-
         "lumin_inst_total",
-
         "postes_nuev_número",
         "postes_reemp_número",
-
         "benef_dir_número",
-
         "empleos_generados",
         "nro_personal_fem"
     ]
@@ -1239,18 +1248,27 @@ def validar_form8(df):
         validar_numericos(
             df,
             columnas_numericas,
-            "FORM8"
+            "Formulario 8_Errores de validación"
         )
     )
 
     errores.extend(
         validar_presupuesto(
             df,
-            "FORM8"
+            "Formulario 8_Errores de validación"
         )
     )
 
     return errores
+
+
+
+
+
+
+
+
+
 
 
 
