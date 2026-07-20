@@ -357,23 +357,23 @@ def validar_form2(df):
         error = ""
 
         if row["distribuidora"] not in DISTRIBUIDORAS:
-            error += "Valor ingresado en distribuidora es inválido, use la lista desplegable; "
+            error += "Valor ingresado en distribuidora es inválido, use la lista desplegable--- "
         if row["etapa_funcional"] not in ETAPA_FUNCIONAL:
-            error += "Valor etapa_funcional inválido, use la lista desplegable; "
+            error += "Valor etapa_funcional inválido, use la lista desplegable--- "
         if row["tipo_gasto"] not in TIPO_GASTO:
-            error += "Valor en tipo_gasto inválido, use la lista desplegable; "
+            error += "Valor en tipo_gasto inválido, use la lista desplegable--- "
         if row["grupo_gasto"] not in GRUPO_GASTO:
-            error += "Vlor en grupo_gasto inválido, use la lista desplegable; "
+            error += "Vlor en grupo_gasto inválido, use la lista desplegable--- "
 
         if not str(row["nro_partida"]).isdigit():
-            error += "nro_partida inválido, ingrese únicamente valores numéricos; "
+            error += "nro_partida inválido, ingrese únicamente valores numéricos--- "
 
         for c in [
             "asignacion_inicial","reformas","presupuesto_codificado",
             "pre_compromiso","compromiso","devengado","pagado"
         ]:
             if not es_decimal(row[c]):
-                error += f"{c} inválido; "
+                error += f"{c} inválido--- "
 
         if error:
             errores.append({**row,"Formulario":"FORM2","Fila":fila,"Error":error})
