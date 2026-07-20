@@ -1271,7 +1271,7 @@ def validar_form8(df):
 
 
 
-
+#Validación de los datos del formulario 9 de ejecución de recursos
 def validar_form9(df):
 
     errores = []
@@ -1281,7 +1281,7 @@ def validar_form9(df):
             df,
             "distribuidora",
             DISTRIBUIDORAS,
-            "FORM9"
+            "Formulario 9_Errores de validación"
         )
     )
 
@@ -1290,7 +1290,7 @@ def validar_form9(df):
             df,
             "fuente",
             FUENTES,
-            "FORM9"
+            "Formulario 9_Errores de validación"
         )
     )
 
@@ -1299,16 +1299,37 @@ def validar_form9(df):
             df,
             "servicio",
             SERVICIOS,
-            "FORM9"
+            "Formulario 9_Errores de validación"
         )
     )
+
+
+    errores.extend(
+    validar_codigo_numerico_texto(
+        df,
+        "codigo_proyecto_eed",
+        "Formulario 9_Errores de validación"
+    )
+    )
+
+
+    errores.extend(
+    validar_obligatorios(
+        df,
+        [
+            "nombre_proyecto",
+            "objeto_proyecto"
+        ],
+        "Formulario 9_Errores de validación"
+        )
+        )
 
     errores.extend(
         validar_catalogo(
             df,
             "estado_proyecto",
             ESTADO_PROYECTO,
-            "FORM9"
+            "Formulario 9_Errores de validación"
         )
     )
 
@@ -1317,7 +1338,7 @@ def validar_form9(df):
         df,
         "etapa_ejecucion_proyecto",
         ETAPA_EJECUCION,
-        "FORM9"
+        "Formulario 9_Errores de validación"
     )
 )
     
@@ -1329,7 +1350,7 @@ def validar_form9(df):
                 "fecha_pro_fin_proyecto",
                 "fecha_fin_proyecto"
             ],
-            "FORM9"
+            "Formulario 9_Errores de validación"
         )
     )
 
@@ -1340,29 +1361,24 @@ def validar_form9(df):
 
             errores.append({
                 **row.to_dict(),
-                "Formulario": "FORM9",
+                "Formulario": "Formulario 9_Errores de validación",
                 "Fila": i + 2,
                 "Error": "proyecto_arrastre inválido"
             })
 
     columnas_numericas = [
-
         "avance_ejecucion_fisica",
         "avance_ejecucion_total",
-
         "presupuesto_codificado_arrastre",
         "devengado_arrastre",
         "pagado_arrastre",
-
         "asignacion_inicial",
         "reformas",
         "presupuesto_codificado",
-
         "pre_compromiso",
         "compromiso",
         "devengado",
         "pagado",
-
         "anticipo_no_amortizado"
     ]
 
@@ -1370,29 +1386,31 @@ def validar_form9(df):
         validar_numericos(
             df,
             columnas_numericas,
-            "FORM9"
+            "Formulario 9_Errores de validación"
         )
     )
 
     errores.extend(
         validar_presupuesto(
             df,
-            "FORM9"
+            "Formulario 9_Errores de validación"
         )
     )
 
     return errores
 
-# ================= VALIDADORES =================
 
+
+
+# ================= VALIDADORES =================
 VALIDADORES = {
 
     "FORM 2 GASTO AO&M-C SPEE": validar_form2,
     "FORM 3 ANUALIDAD ACTIVO SPEE": validar_form3,
-    "FORM 9 OTROS RECURSOS": validar_form9,
     "FORM 4 EXPANSION SPEE": validar_form4,
     "FORM 6 GASTO AO&M SAPG": validar_form6,
-    "FORM 8 EXPANSION SAPG": validar_form8
+    "FORM 8 EXPANSION SAPG": validar_form8,
+    "FORM 9 OTROS RECURSOS": validar_form9
 }
 
 VALIDADORES["FORM 7 ANUALIDAD ACTIVO SAPG"] = validar_form7_sql
