@@ -11,7 +11,7 @@ RUTA_TEMP = "temp.xlsx"
 
 RUTA_OK_BASE = r"C:\Users\william.boconzaca\OneDrive - AGENCIA DE REGULACION Y CONTROL DE ELECTRICIDAD\Validador formularios\Archivos válidos"
 
-# ================= VALIDACIONES CAMPOS SQL =================
+# Bibliotecas para campos en común que provienen de listas desplegables
 
 DISTRIBUIDORAS = [
     'EE Santiago','CNEL EP Eficiencia Energética','CNEL EP Oficina Central','CNEL EP UN Bolívar',
@@ -22,23 +22,21 @@ DISTRIBUIDORAS = [
     'EE Cotopaxi','EE Galápagos','EE Norte','EE Quito','EE Riobamba','EE Sur'
 ]
 
-ETAPA_FUNCIONAL = [
-    'Subtransmisión','Distribución','Administración',
-    'Comercialización','Instalaciones de Servicio al Cliente'
-]
+ETAPA_FUNCIONAL = ['Subtransmisión','Distribución','Administración','Comercialización','Instalaciones de Servicio al Cliente']
 
 RUBROS_SPEE=['Calidad','Responsabilidad Ambiental','SIGDE','Confiabilidad','Otros']
 
-TIPO_GASTO = [
-    'Gastos administrativos','Gastos de venta','Gastos financieros'
-]
+TIPO_GASTO = ['Gastos administrativos','Gastos de venta','Gastos financieros']
 
-GRUPO_GASTO = [
-    'Materiales','Mano de Obra','Otros gastos','Servicios'
-]
+GRUPO_GASTO = ['Materiales','Mano de Obra','Otros gastos','Servicios']
+
 
 SN = ['Sí','No']
+
 ESTADO_PROYECTO = ['Iniciado','No iniciado','Paralizado','Finalizado']
+
+PERM_AMB = ['Certificado Ambiental','Licencia Ambiental','Registro Ambiental','No aplica']
+
 ETAPA_EJECUCION = [
     "No iniciado 0%",
     "Elaboración de pliegos 5%",
@@ -49,7 +47,7 @@ ETAPA_EJECUCION = [
     "Acta de entrega - recepción 95%",
     "En ejecución 41% - 90%",
     "Registro contable 100%"]
-PERM_AMB = ['Certificado Ambiental','Licencia Ambiental','Registro Ambiental','No aplica']
+
 FUENTES = [
     "PLANREP Crédito",
     "PMD  Crédito",
@@ -81,9 +79,7 @@ SERVICIOS = ["SPEE","SAPG","SCVE"]
 
 TIPO_PROYECTO=['Mejora','Repotenciación','Reposición','Responsabilidad Ambiental']
 
-
 CLAVES_DISTRIBUIDORAS = {
-
     "EE Santiago": "clave001",
     "CNEL EP Eficiencia Energética": "clave023",
     "CNEL EP Oficina Central": "clave002",
@@ -110,7 +106,7 @@ CLAVES_DISTRIBUIDORAS = {
 }
 
 
-# ================= LIMPIAR COLUMNAS =================
+# Validación para datos duplicados y limpiar columnas
 
 def validar_duplicados(df, nombre_form):
 
@@ -134,6 +130,7 @@ def validar_duplicados(df, nombre_form):
         })
 
     return errores
+
 
 
 def limpiar_columnas(cols):
@@ -167,14 +164,22 @@ def validar_errores_excel(ruta_excel):
                     errores.append({
                         "Formulario": hoja.title,
                         "Fila": celda.row,
-                        "Error": f"Dato inválido, error en fórmula Excel: {celda.value} en {celda.coordinate}"
+                        "Error": f"Dato inválido, error en la fórmula de Excel: {celda.value} en {celda.coordinate}"
                     })
 
     return errores
 
 
-# ================= VALIDACIONES =================
 
+
+
+
+########################################################
+#Definiciones para las validaciones
+######################################################## 
+
+
+#Validaciones del formulario 1, valida que el valor de anticipo no amortizado no esté vacío
 def validar_form1(df):
 
     errores = []
@@ -205,7 +210,7 @@ def validar_form1(df):
     return errores
 
 
-
+#Validaciones del formulario 5, valida que el valor de anticipo no amortizado no esté vacío
 def validar_form5(df):
 
     errores = []
@@ -317,6 +322,8 @@ def validar_numericos(df, columnas, nombre_form):
 
     return errores
 
+
+#Validación de campos provenientes de errores de fórmulas en excel
 def validar_fechas(df, columnas, nombre_form):
 
     errores = []
@@ -510,15 +517,39 @@ def validar_presupuesto(df, nombre):
 
 
 
-def validar_codigo_numerico_texto(df, columna, nombre_form):
+def validar_codigo_texto(df, columna, nombre_form):
 
     errores = []
+
+    valores_no_validos = {
+        "NA",
+        "N/A",
+        "N.A",
+        "N.A.",
+        "ND",
+        "N-D",
+        "S/N",
+        "SN",
+        "NULL",
+        "NONE",
+        "SIN DATO",
+        "SIN DATOS",
+        "NO DISPONIBLE",
+        "NO REGISTRA",
+        "NO REPORTA",
+        "NO INFORMA",
+        "-",
+        "--",
+        "---",
+        ".",
+        ".."
+    }
 
     for i, row in df.iterrows():
 
         valor = str(row[columna]).strip()
 
-        # obligatorio
+        # Obligatorio
         if valor == "":
             errores.append({
                 **row.to_dict(),
@@ -528,13 +559,13 @@ def validar_codigo_numerico_texto(df, columna, nombre_form):
             })
             continue
 
-        # solo dígitos
-        if not valor.isdigit():
+        # No permitir valores genéricos de relleno
+        if valor.upper() in valores_no_validos:
             errores.append({
                 **row.to_dict(),
                 "Formulario": nombre_form,
                 "Fila": i + 2,
-                "Error": f"{columna} debe contener únicamente valores numéricos"
+                "Error": f"{columna} no admite valores como '{valor}'. Use información válida o 'No aplica'."
             })
 
     return errores
@@ -1419,7 +1450,7 @@ VALIDADORES["FORM 7 ANUALIDAD ACTIVO SAPG"] = validar_form7_sql
 
 
 
-#Validación de que los formularios contengan todas las columnas que se detallan en el instructivo, tampoco se pueden añadir columnas
+#Validación de que los formularios contengan todas las columnas que se detallan en el instructivo, tampoco se pueden añadir columnas ni quitar formularios
 FORMULARIOS = {
 
     "FORM 2 GASTO AO&M-C SPEE": [
@@ -1473,10 +1504,12 @@ FORMULARIOS = {
         "sdn_planificado","sdn_ejecutado","pisdn_planificado","pisdn_ejecutado",
         "perm_amb","fecha_permiso_planif","fecha_permiso_ejec",
         "empleos_generados","nro_personal_fem","observaciones"],
+
     "FORM 6 GASTO AO&M SAPG": ["distribuidora","nro_partida","descripcion_partida","tipo_gasto",
         "grupo_gasto","asignacion_inicial","reformas",
         "presupuesto_codificado","pre_compromiso","compromiso",
         "devengado","pagado"],
+
     "FORM 7 ANUALIDAD ACTIVO SAPG": [
         "distribuidora","proyecto_arrastre","proyecto_calificado_ecostos",
         "anio_calificacion","codigo_ecostos","rubro_arrastre",
@@ -1494,6 +1527,7 @@ FORMULARIOS = {
         "lumin_inst_total","postes_nuev_número","postes_reemp_número",
         "benef_dir_número","empleos_generados","nro_personal_fem","observaciones"
     ],
+
     "FORM 8 EXPANSION SAPG":  [
         "distribuidora","proyecto_arrastre","anio_calificacion",
         "codigo_proyecto_eed","nombre_proyecto","objeto_proyecto",
@@ -1510,6 +1544,7 @@ FORMULARIOS = {
         "lumin_inst_total","postes_nuev_número","postes_reemp_número",
         "benef_dir_número","empleos_generados","nro_personal_fem","observaciones"
     ],
+
 "FORM 9 OTROS RECURSOS":[
     "distribuidora","fuente","proyecto_arrastre","servicio","codigo_proyecto_eed","nombre_proyecto",
     "objeto_proyecto","provincia","canton","parroquia","estado_proyecto","etapa_ejecucion_proyecto",
@@ -1522,7 +1557,7 @@ FORMULARIOS = {
 
 
 # *************************************************************
-# ***************** INTERFAZ APLICACIÓN WEB********************
+# ***************** Interfaz aplicación web********************
 # *************************************************************
 
 
@@ -1545,7 +1580,7 @@ with col1:
 
 with col2:
 
-    # FILA SUPERIOR
+    # Fila superios archivos
     fila1_col1, fila1_col2 = st.columns(2)
 
     with fila1_col1:
@@ -1564,7 +1599,7 @@ with col2:
                 file_name="Instructivo_Entrega de información.docx"
             )
 
-    # FILA INFERIOR
+    # Fila inferior archivos
     fila2_col1, fila2_col2 = st.columns(2)
 
     with fila2_col1:
@@ -1701,7 +1736,7 @@ if archivo:
             st.error("❌ Contraseña incorrecta.")
             st.stop()
 
-        # Validar distribuidora vs nombre del archivo
+        # Validamos que el nombre del archivo cargado contenga el valor seleccionado en la lista desplegable  
         if not nombre.upper().startswith(
             distribuidora_seleccionada.upper()
         ):
@@ -1840,7 +1875,7 @@ if archivo:
                             "nombre": archivo.name,
                             "contenido": contenido
                             }
-                        
+                        #Conexión HTTP con power automate para cargar los archivos validados correctamente en sharepoint
                         r = requests.post(
                             "https://default7590cbcbf5e34d29a400a282c2a20f.f4.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/25cbc7bf8f27409bbe175b6331af7fcd/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_nGDSBVGt8krIgP60t6txEGDiOoh9ePkPWJlp4ji2pI",
                             json=payload
