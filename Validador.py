@@ -27,6 +27,8 @@ ETAPA_FUNCIONAL = [
     'Comercialización','Instalaciones de Servicio al Cliente'
 ]
 
+RUBROS_SPEE=['Calidad','Responsabilidad Ambiental','SIGDE','Confiabilidad','Otros']
+
 TIPO_GASTO = [
     'Gastos administrativos','Gastos de venta','Gastos financieros'
 ]
@@ -491,7 +493,34 @@ def validar_presupuesto(df, nombre):
 
 
 
+def validar_codigo_numerico_texto(df, columna, nombre_form):
 
+    errores = []
+
+    for i, row in df.iterrows():
+
+        valor = str(row[columna]).strip()
+
+        # obligatorio
+        if valor == "":
+            errores.append({
+                **row.to_dict(),
+                "Formulario": nombre_form,
+                "Fila": i + 2,
+                "Error": f"{columna} es obligatorio"
+            })
+            continue
+
+        # solo dígitos
+        if not valor.isdigit():
+            errores.append({
+                **row.to_dict(),
+                "Formulario": nombre_form,
+                "Fila": i + 2,
+                "Error": f"{columna} debe contener únicamente valores numéricos"
+            })
+
+    return errores
 
 
 
@@ -508,6 +537,27 @@ def validar_form3(df):
             "Formulario 3_Errores de validación"
         )
     )
+
+
+    errores.extend(
+    validar_codigo_numerico_texto(
+        df,
+        "codigo_proyecto_eed",
+        "Formulario 3_Errores de validación"
+    )
+    )
+
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "rubro_arrastre",
+            RUBROS_SPEE,
+            "Formulario 3_Errores de validación"
+        )
+    )
+
+
     
     errores.extend(
         validar_catalogo(
@@ -562,6 +612,7 @@ def validar_form3(df):
 
     columnas_numericas = [
 
+        "anio_calificacion",
         "avance_ejecucion_fisica",
         "avance_ejecucion_total",
         "monto_calificado",
@@ -624,6 +675,9 @@ def validar_form3(df):
     )
 
     return errores
+
+
+
 
 
 
