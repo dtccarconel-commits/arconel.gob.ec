@@ -85,6 +85,7 @@ TIPO_PROYECTO=['Mejora','Repotenciación','Reposición','Responsabilidad Ambient
 CLAVES_DISTRIBUIDORAS = {
 
     "EE Santiago": "clave001",
+    "CNEL EP Eficiencia Energética": "clave023",
     "CNEL EP Oficina Central": "clave002",
     "CNEL EP UN Bolívar": "clave003",
     "CNEL EP UN El Oro": "clave004",
@@ -780,7 +781,7 @@ def validar_decimal_generico(df, columna, nombre):
 
 
 
-
+#Validaciones para el formulario 4 de ejecución de recursos
 def validar_form4(df):
 
     errores = []
