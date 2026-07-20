@@ -988,7 +988,7 @@ def validar_form7_sql(df):
             df,
             "distribuidora",
             DISTRIBUIDORAS,
-            "FORM7"
+            "Formulario 7_Errores de validación"
         )
     )
 
@@ -997,16 +997,38 @@ def validar_form7_sql(df):
         df,
         "proyecto_calificado_ecostos",
         SN,
-        "FORM7"
+        "Formulario 7_Errores de validación"
     )
-)
+    )
+
+
+    errores.extend(
+    validar_obligatorios(
+        df,
+        [
+            "codigo_ecostos",
+            "nombre_proyecto",
+            "objeto_proyecto"
+        ],
+        "Formulario 7_Errores de validación"
+        )
+        )    
+
+    errores.extend(
+    validar_codigo_numerico_texto(
+        df,
+        "codigo_proyecto_eed",
+        "Formulario 7_Errores de validación"
+    )
+    )
+
 
     errores.extend(
         validar_catalogo(
             df,
             "etapa_ejecucion_proyecto",
             ETAPA_EJECUCION,
-            "FORM7"
+            "Formulario 7_Errores de validación"
         )
     )
 
@@ -1015,7 +1037,7 @@ def validar_form7_sql(df):
             df,
             "estado_proyecto",
             ESTADO_PROYECTO,
-            "FORM7"
+            "Formulario 7_Errores de validación"
         )
     )
 
@@ -1027,7 +1049,7 @@ def validar_form7_sql(df):
             "fecha_pro_fin_proyecto",
             "fecha_fin_proyecto"
         ],
-        "FORM7"  # cambiar según corresponda
+        "Formulario 7_Errores de validación"
     )
 )
     
@@ -1038,7 +1060,7 @@ def validar_form7_sql(df):
 
             errores.append({
                 **row.to_dict(),
-                "Formulario": "FORM7",
+                "Formulario": "Formulario 7_Errores de validación",
                 "Fila": i + 2,
                 "Error": "proyecto_arrastre inválido"
             })
@@ -1056,7 +1078,7 @@ def validar_form7_sql(df):
 
             errores.append({
                 **row.to_dict(),
-                "Formulario": "FORM7",
+                "Formulario": "Formulario 7_Errores de validación",
                 "Fila": i + 2,
                 "Error": "rubro_arrastre inválido"
             })
@@ -1064,6 +1086,7 @@ def validar_form7_sql(df):
     # VALIDACIÓN DE CAMPOS NUMÉRICOS
     columnas_numericas = [
 
+        "anio_calificacion",
         "avance_ejecucion_fisica",
         "avance_ejecucion_total",
         "monto_calificado",
@@ -1094,20 +1117,31 @@ def validar_form7_sql(df):
         validar_numericos(
             df,
             columnas_numericas,
-            "FORM7"
+            "Formulario 7_Errores de validación"
         )
     )
 
     errores.extend(
         validar_presupuesto(
             df,
-            "FORM7"
+            "Formulario 7_Errores de validación"
         )
     )
 
     return errores
 
 
+
+
+
+
+
+
+
+
+
+
+#Validación de datos del formulario 8 de ejecución de recursos
 def validar_form8(df):
 
     errores = []
@@ -1345,8 +1379,11 @@ VALIDADORES = {
 
 VALIDADORES["FORM 7 ANUALIDAD ACTIVO SAPG"] = validar_form7_sql
 
-# ================= VALIDACIONES NOMBRES COLUMNAS =================
 
+
+
+
+#Validación de que los formularios contengan todas las columnas que se detallan en el instructivo, tampoco se pueden añadir columnas
 FORMULARIOS = {
 
     "FORM 2 GASTO AO&M-C SPEE": [
