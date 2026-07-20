@@ -517,7 +517,8 @@ def validar_presupuesto(df, nombre):
 
 
 
-def validar_codigo_texto(df, columna, nombre_form):
+
+def validar_codigo_numerico_texto(df, columna, nombre_form):
 
     errores = []
 
@@ -569,7 +570,6 @@ def validar_codigo_texto(df, columna, nombre_form):
             })
 
     return errores
-
 
 
 
