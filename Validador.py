@@ -1490,6 +1490,7 @@ if archivo:
 
     EMPRESAS = [
         "CNEL EP Oficina Central",
+        "CNEL EP Eficiencia Energética",
         "EE Santiago",
         "CNEL EP UN Bolívar",
         "CNEL EP UN El Oro",
