@@ -487,6 +487,24 @@ def validar_form3(df):
             "FORM3"
         )
     )
+    
+    errores.extend(
+        validar_catalogo(
+            df,
+            "proyecto_arrastre",
+            SN,
+            "FORM3"
+        )
+    )
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "proyecto_calificado_ecostos",
+            SN,
+            "FORM3"
+        )
+    )
 
     errores.extend(
         validar_catalogo(
@@ -634,6 +652,15 @@ def validar_form4(df):
             "FORM4"
         )
     )
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "proyecto_arrastre",
+            SN,
+            "FORM3"
+        )
+    )    
 
     errores.extend(
         validar_catalogo(
@@ -1469,23 +1496,11 @@ if archivo:
                         else:
                             errores_duplicados=[]
 
-                        st.write(
-                            hoja,
-                            "Total de errores de fórmulas Excel:",
-                            errores_excel_hoja
-                            )
+                        st.write(hoja,"Total de errores de fórmulas Excel:",errores_excel_hoja)
 
-                        st.write(
-                            hoja,
-                            "Total de errores de validación:",
-                            len(errores_validacion)
-                            )
+                        st.write(hoja,"Total de errores de validación:",len(errores_validacion))
                         
-                        st.write(
-                            hoja,
-                            "Total de errores duplicados:",
-                            len(errores_duplicados)
-                            )
+                        st.write(hoja,"Total de errores duplicados:",len(errores_duplicados))
                         
                         errores_totales.extend(errores_validacion)
                         errores_totales.extend(errores_duplicados)
