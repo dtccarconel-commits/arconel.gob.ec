@@ -376,7 +376,7 @@ def validar_form2(df):
                 error += f"{c} inválido--- "
 
         if error:
-            errores.append({**row,"Formulario":"Formulario 2: Errores de validación","Fila":fila,"Error":error})
+            errores.append({**row,"Formulario":"Formulario 2_Errores de validación","Fila":fila,"Error":error})
 
     return errores
 
@@ -424,7 +424,7 @@ def validar_form6(df):
 
             errores.append({
                 **row.to_dict(),
-                "Formulario": "Formulario 6: Errores de validación",
+                "Formulario": "Formulario 6_Errores de validación",
                 "Fila": fila,
                 "Error": error
             })
