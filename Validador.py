@@ -624,6 +624,16 @@ def validar_form3(df):
     errores.extend(
         validar_catalogo(
             df,
+            "etapa_ejecucion_proyecto",
+            ETAPA_EJECUCION,
+            "Formulario 3_Errores de validación"
+        )
+    )
+
+
+    errores.extend(
+        validar_catalogo(
+            df,
             "proyecto_calificado_ecostos",
             SN,
             "Formulario 3_Errores de validación"
