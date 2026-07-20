@@ -382,7 +382,7 @@ def validar_form2(df):
         if row["tipo_gasto"] not in TIPO_GASTO:
             error += "Valor en tipo_gasto inválido, use la lista desplegable--- "
         if row["grupo_gasto"] not in GRUPO_GASTO:
-            error += "Vlor en grupo_gasto inválido, use la lista desplegable--- "
+            error += "Valor en grupo_gasto inválido, use la lista desplegable--- "
 
         if not str(row["nro_partida"]).isdigit():
             error += "nro_partida inválido, ingrese únicamente valores numéricos--- "
@@ -538,6 +538,9 @@ def validar_codigo_numerico_texto(df, columna, nombre_form):
             })
 
     return errores
+
+
+
 
 
 
@@ -781,6 +784,9 @@ def validar_decimal_generico(df, columna, nombre):
 
 
 
+
+
+
 #Validaciones para el formulario 4 de ejecución de recursos
 def validar_form4(df):
 
@@ -799,25 +805,67 @@ def validar_form4(df):
             df,
             "distribuidora",
             DISTRIBUIDORAS,
-            "FORM4"
+            "Formulario 4_Errores de validación"
         )
     )
+
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "etapa_ejecucion_proyecto",
+            ETAPA_EJECUCION,
+            "Formulario 4_Errores de validación"
+        )
+    )
+
+
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "aso_transmisión",
+            SN,
+            "Formulario 4_Errores de validación"
+        )
+    )
+
+
+    errores.extend(
+    validar_obligatorios(
+        df,
+        [
+            "nombre_proyecto",
+            "objeto_proyecto"
+        ],
+        "Formulario 4_Errores de validación"
+        )
+        )
+
 
     errores.extend(
         validar_catalogo(
             df,
             "proyecto_arrastre",
             SN,
-            "FORM3"
+            "Formulario 4_Errores de validación"
         )
     )    
+
+    errores.extend(
+    validar_codigo_numerico_texto(
+        df,
+        "codigo_proyecto_eed",
+        "Formulario 4_Errores de validación"
+    )
+    )
 
     errores.extend(
         validar_catalogo(
             df,
             "estado_proyecto",
             ESTADO_PROYECTO,
-            "FORM4"
+            "Formulario 4_Errores de validación"
         )
     )
 
@@ -826,7 +874,7 @@ def validar_form4(df):
         df,
         "etapa_funcional",
         ETAPA_FUNCIONAL,
-        "FORM4"
+        "Formulario 4_Errores de validación"
     )
     )
 
@@ -835,7 +883,7 @@ def validar_form4(df):
             df,
             "perm_amb",
             PERM_AMB,
-            "FORM4"
+            "Formulario 4_Errores de validación"
         )
     )
 
@@ -849,13 +897,14 @@ def validar_form4(df):
             "fecha_permiso_planif",
             "fecha_permiso_ejec"
         ],
-        "FORM4"
+        "Formulario 4_Errores de validación"
     )
 )
 
 
     columnas_numericas = [
 
+        "anio_calificacion",
         "avance_ejecucion_fisica",
         "avance_ejecucion_total",
         "presupuesto_codificado_arrastre",
@@ -905,19 +954,31 @@ def validar_form4(df):
         validar_numericos(
             df,
             columnas_numericas,
-            "FORM4"
+            "Formulario 4_Errores de validación"
         )
     )
 
     errores.extend(
         validar_presupuesto(
             df,
-            "FORM4"
+            "Formulario 4_Errores de validación"
         )
     )
 
     return errores
 
+
+
+
+
+
+
+
+
+
+
+
+#####Validación del formulario 7 de ejecución de recursos
 def validar_form7_sql(df):
 
     errores = []
