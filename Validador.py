@@ -488,6 +488,14 @@ def validar_presupuesto(df, nombre):
 
     return errores
 
+
+
+
+
+
+
+
+#Validación del formulario 3 de ejecución de recursos
 def validar_form3(df):
 
     errores = []
@@ -497,7 +505,7 @@ def validar_form3(df):
             df,
             "distribuidora",
             DISTRIBUIDORAS,
-            "FORM3"
+            "Formulario 3_Errores de validación"
         )
     )
     
@@ -506,7 +514,7 @@ def validar_form3(df):
             df,
             "proyecto_arrastre",
             SN,
-            "FORM3"
+            "Formulario 3_Errores de validación"
         )
     )
 
@@ -515,7 +523,7 @@ def validar_form3(df):
             df,
             "proyecto_calificado_ecostos",
             SN,
-            "FORM3"
+            "Formulario 3_Errores de validación"
         )
     )
 
@@ -524,7 +532,7 @@ def validar_form3(df):
             df,
             "estado_proyecto",
             ESTADO_PROYECTO,
-            "FORM3"
+            "Formulario 3_Errores de validación"
         )
     )
 
@@ -533,7 +541,7 @@ def validar_form3(df):
             df,
             "perm_amb",
             PERM_AMB,
-            "FORM3"
+            "Formulario 3_Errores de validación"
         )
     )
 
@@ -547,7 +555,7 @@ def validar_form3(df):
             "fecha_perm_amb_planif",
             "fecha_perm_amb_ejec"
         ],
-        "FORM3"
+        "Formulario 3_Errores de validación"
     )
 )
     
@@ -604,18 +612,23 @@ def validar_form3(df):
         validar_numericos(
             df,
             columnas_numericas,
-            "FORM3"
+            "Formulario 3_Errores de validación"
         )
     )
 
     errores.extend(
         validar_presupuesto(
             df,
-            "FORM3"
+            "Formulario 3_Errores de validación"
         )
     )
 
     return errores
+
+
+
+
+
 
 def validar_decimal_generico(df, columna, nombre):
     errores = []
@@ -644,6 +657,12 @@ def validar_decimal_generico(df, columna, nombre):
             errores.append({**row,"Formulario":nombre,"Fila":fila,"Error":error})
 
     return errores
+
+
+
+
+
+
 
 def validar_form4(df):
 
