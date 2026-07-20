@@ -376,7 +376,7 @@ def validar_form2(df):
                 error += f"{c} inválido--- "
 
         if error:
-            errores.append({**row,"Formulario":"FORM2","Fila":fila,"Error":error})
+            errores.append({**row,"Formulario":"Formulario 2: Errores de validación","Fila":fila,"Error":error})
 
     return errores
 
@@ -384,6 +384,8 @@ def validar_form2(df):
 
 
 
+
+#Validación del fomrulrio 6 de ejecución de recursos
 def validar_form6(df):
 
     errores = []
@@ -394,16 +396,16 @@ def validar_form6(df):
         error = ""
 
         if row["distribuidora"] not in DISTRIBUIDORAS:
-            error += "distribuidora inválida; "
+            error += "Valor en distribuidora inválido, por favor use la lista desplegable--- "
 
         if row["tipo_gasto"] not in TIPO_GASTO:
-            error += "tipo_gasto inválido; "
+            error += "Valor en tipo_gasto inválido, por favor use la lista desplegable--- "
 
         if row["grupo_gasto"] not in GRUPO_GASTO:
-            error += "grupo_gasto inválido; "
+            error += "Valor en grupo_gasto inválido, por favor use la lista desplegable--- "
 
         if not str(row["nro_partida"]).isdigit():
-            error += "nro_partida inválido; "
+            error += "Valor en nro_partida inválido, use únicamente valores numéricos--- "
 
         for c in [
             "asignacion_inicial",
@@ -422,12 +424,21 @@ def validar_form6(df):
 
             errores.append({
                 **row.to_dict(),
-                "Formulario": "FORM6",
+                "Formulario": "Formulario 6: Errores de validación",
                 "Fila": fila,
                 "Error": error
             })
 
     return errores
+
+
+
+
+
+
+
+
+
 
 def validar_presupuesto(df, nombre):
 
