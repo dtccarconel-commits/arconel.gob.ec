@@ -77,11 +77,9 @@ FUENTES = [
     "Contribuciones de usuarios"
 ]
 
-SERVICIOS = [
-    "SPEE",
-    "SAPG",
-    "SCVE"
-]
+SERVICIOS = ["SPEE","SAPG","SCVE"]
+
+TIPO_PROYECTO=['Mejora','Repotenciación','Reposición','Responsabilidad Ambiental']
 
 
 CLAVES_DISTRIBUIDORAS = {
@@ -265,6 +263,24 @@ def validar_catalogo(df, columna, catalogo, nombre_form):
                  }
                  )
 
+
+    return errores
+
+def validar_obligatorios(df, columnas, nombre_form):
+
+    errores = []
+
+    for i, row in df.iterrows():
+
+        for col in columnas:
+
+            if str(row[col]).strip() == "":
+                errores.append({
+                    **row.to_dict(),
+                    "Formulario": nombre_form,
+                    "Fila": i + 2,
+                    "Error": f"{col} es obligatorio"
+                })
 
     return errores
 
@@ -538,6 +554,25 @@ def validar_form3(df):
         )
     )
 
+    errores.extend(
+        validar_catalogo(
+            df,
+            "tipo_de_proyecto",
+            TIPO_PROYECTO,
+            "Formulario 3_Errores de validación"
+        )
+    )
+
+    errores.extend(
+    validar_obligatorios(
+        df,
+        [
+            "nombre_proyecto",
+            "objeto_proyecto"
+        ],
+        "Formulario 3_Errores de validación"
+        )
+        )
 
     errores.extend(
     validar_codigo_numerico_texto(
@@ -557,12 +592,30 @@ def validar_form3(df):
         )
     )
 
+    errores.extend(
+        validar_catalogo(
+            df,
+            "etapa_funcional",
+            ETAPA_FUNCIONAL,
+            "Formulario 3_Errores de validación"
+        )
+    )
+
 
     
     errores.extend(
         validar_catalogo(
             df,
             "proyecto_arrastre",
+            SN,
+            "Formulario 3_Errores de validación"
+        )
+    )
+
+    errores.extend(
+        validar_catalogo(
+            df,
+            "aso_transmisión",
             SN,
             "Formulario 3_Errores de validación"
         )
