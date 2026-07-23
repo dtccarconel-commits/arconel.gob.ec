@@ -906,7 +906,7 @@ def validar_form4(df):
         "etapa_funcional",
         ETAPA_FUNCIONAL,
         "Formulario 4_Errores de validación"
-    )
+        )
     )
 
     errores.extend(
