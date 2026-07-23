@@ -939,6 +939,15 @@ def validar_form4(df):
     )
 
     errores.extend(
+    validar_catalogo(
+        df,
+        "perm_amb",
+        PERM_AMB,
+        "Formulario 4_Errores de validación"
+    )
+)
+
+    errores.extend(
     validar_fechas(
         df,
         [
