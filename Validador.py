@@ -822,7 +822,6 @@ def validar_decimal_generico(df, columna, nombre):
         if "perm_amb" in df.columns and row["perm_amb"] not in PERM_AMB:
             error += "perm_amb inválido; "
 
-        # ORIGINAL
         if not es_decimal(row[columna]):
             error += f"{columna} inválido; "
 
