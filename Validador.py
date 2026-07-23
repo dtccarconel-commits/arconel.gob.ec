@@ -939,10 +939,9 @@ def validar_form4(df):
     )
 
     errores.extend(
-    validar_catalogo(
+    validar_obligatorios(
         df,
-        "perm_amb",
-        PERM_AMB,
+        ["perm_amb"],
         "Formulario 4_Errores de validación"
     )
 )
