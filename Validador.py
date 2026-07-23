@@ -22,20 +22,37 @@ DISTRIBUIDORAS = [
     'EE Cotopaxi','EE Galápagos','EE Norte','EE Quito','EE Riobamba','EE Sur'
 ]
 
-ETAPA_FUNCIONAL = ['Subtransmisión','Distribución','Administración','Comercialización','Instalaciones de Servicio al Cliente']
+ETAPA_FUNCIONAL = [
+    'Subtransmisión','Distribución','Administración','Comercialización','Instalaciones de Servicio al Cliente'
+    ]
 
-RUBROS_SPEE=['Calidad','Responsabilidad Ambiental','SIGDE','Confiabilidad','Otros']
+RUBROS_SPEE=[
+    'Calidad','Responsabilidad Ambiental','SIGDE','Confiabilidad','Otros'
+    ]
 
-TIPO_GASTO = ['Gastos administrativos','Gastos de venta','Gastos financieros']
+TIPO_GASTO = [
+    'Gastos administrativos','Gastos de venta','Gastos financieros'
+    ]
 
-GRUPO_GASTO = ['Materiales','Mano de Obra','Otros gastos','Servicios']
+GRUPO_GASTO = [
+    'Materiales','Mano de Obra','Otros gastos','Servicios'
+    ]
 
 
-SN = ['Sí','No']
+SN = [
+    'Sí','No'
+    ]
 
-ESTADO_PROYECTO = ['Iniciado','No iniciado','Paralizado','Finalizado']
+ESTADO_PROYECTO = [
+    'Iniciado','No iniciado','Paralizado','Finalizado'
+    ]
 
-PERM_AMB = ['Certificado Ambiental','Licencia Ambiental','Registro Ambiental','No aplica']
+PERM_AMB = [
+    "Certificado Ambiental",
+    "Licencia Ambiental",
+    "Registro Ambiental",
+    "No aplica"
+    ]
 
 ETAPA_EJECUCION = [
     "No iniciado 0%",
@@ -75,9 +92,13 @@ FUENTES = [
     "Contribuciones de usuarios"
 ]
 
-SERVICIOS = ["SPEE","SAPG","SCVE"]
+SERVICIOS = [
+    "SPEE","SAPG","SCVE"
+    ]
 
-TIPO_PROYECTO=['Mejora','Repotenciación','Reposición','Responsabilidad Ambiental']
+TIPO_PROYECTO=[
+    'Mejora','Repotenciación','Reposición','Responsabilidad Ambiental'
+    ]
 
 CLAVES_DISTRIBUIDORAS = {
     "EE Santiago": "clave001",
