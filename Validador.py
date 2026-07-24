@@ -201,6 +201,41 @@ def validar_errores_excel(ruta_excel):
 
 
 #Validaciones del formulario 1, valida que el valor de anticipo no amortizado no esté vacío
+def validar_estado_proyecto(df, nombre_form):
+
+    errores = []
+
+    columnas_obligatorias = [
+        "etapa_ejecucion_proyecto",
+        "avance_ejecucion_fisica",
+        "avance_ejecucion_total",
+        "fecha_inicio_proyecto"
+    ]
+
+    for i, row in df.iterrows():
+
+        estado = str(row["estado_proyecto"]).strip()
+
+        if estado != "No iniciado":
+
+            for col in columnas_obligatorias:
+
+                valor = str(row[col]).strip()
+
+                if valor == "":
+                    errores.append({
+                        **row.to_dict(),
+                        "Formulario": nombre_form,
+                        "Fila": i + 2,
+                        "Error": (
+                            f"{col} es obligatorio cuando "
+                            f"estado_proyecto es diferente de 'No iniciado'"
+                        )
+                    })
+
+    return errores
+
+
 def validar_form1(df):
 
     errores = []
@@ -611,6 +646,13 @@ def validar_form3(df):
     )
 
     errores.extend(
+    validar_estado_proyecto(
+        df,
+        "Formulario 3_Errores de validación"
+        )
+    )
+
+    errores.extend(
         validar_catalogo(
             df,
             "tipo_de_proyecto",
@@ -713,6 +755,14 @@ def validar_form3(df):
             "Formulario 3_Errores de validación"
         )
     )
+
+    errores.extend(
+    validar_obligatorios(
+        df,
+        ["perm_amb"],
+        "Formulario 3_Errores de validación"
+    )
+)
 
     errores.extend(
     validar_fechas(
@@ -858,6 +908,13 @@ def validar_form4(df):
             DISTRIBUIDORAS,
             "Formulario 4_Errores de validación"
         )
+    )
+
+    errores.extend(
+    validar_estado_proyecto(
+        df,
+        "Formulario 4_Errores de validación"
+    )
     )
 
 
