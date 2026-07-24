@@ -201,14 +201,36 @@ def validar_errores_excel(ruta_excel):
 
 
 #Validaciones del formulario 1, valida que el valor de anticipo no amortizado no esté vacío
+def validar_fecha_fin_finalizado(df, nombre_form):
+
+    errores = []
+
+    for i, row in df.iterrows():
+
+        estado = str(row["estado_proyecto"]).strip()
+
+        fecha_fin = str(row["fecha_fin_proyecto"]).strip()
+
+        if estado == "Finalizado" and fecha_fin == "":
+
+            errores.append({
+                **row.to_dict(),
+                "Formulario": nombre_form,
+                "Fila": i + 2,
+                "Error": (
+                    "fecha_fin_proyecto es obligatoria cuando "
+                    "estado_proyecto = 'Finalizado'"
+                )
+            })
+
+    return errores
+
+
 def validar_estado_proyecto(df, nombre_form):
 
     errores = []
 
     columnas_obligatorias = [
-        "etapa_ejecucion_proyecto",
-        "avance_ejecucion_fisica",
-        "avance_ejecucion_total",
         "fecha_inicio_proyecto"
     ]
 
@@ -644,9 +666,18 @@ def validar_form3(df):
             "Formulario 3_Errores de validación"
         )
     )
+    
 
     errores.extend(
     validar_estado_proyecto(
+        df,
+        "Formulario 3_Errores de validación"
+        )
+    )
+
+
+    errores.extend(
+    validar_fecha_fin_finalizado(
         df,
         "Formulario 3_Errores de validación"
         )
@@ -911,6 +942,13 @@ def validar_form4(df):
     )
 
     errores.extend(
+    validar_fecha_fin_finalizado(
+        df,
+        "Formulario 4_Errores de validación"
+    )
+)
+
+    errores.extend(
     validar_estado_proyecto(
         df,
         "Formulario 4_Errores de validación"
@@ -1107,6 +1145,7 @@ def validar_form7_sql(df):
             "Formulario 7_Errores de validación"
         )
     )
+    
 
     errores.extend(
     validar_catalogo(
@@ -1117,6 +1156,19 @@ def validar_form7_sql(df):
     )
     )
 
+    errores.extend(
+    validar_fecha_fin_finalizado(
+        df,
+        "Formulario 7_Errores de validación"
+        )
+    )
+
+    errores.extend(
+    validar_estado_proyecto(
+        df,
+        "Formulario 7_Errores de validación"
+        )
+    )
 
     errores.extend(
     validar_obligatorios(
@@ -1272,6 +1324,14 @@ def validar_form8(df):
     )
 
     errores.extend(
+    validar_estado_proyecto(
+        df,
+        "Formulario 8_Errores de validación"
+    )
+)
+
+
+    errores.extend(
         validar_catalogo(
             df,
             "estado_proyecto",
@@ -1288,6 +1348,13 @@ def validar_form8(df):
             "Formulario 8_Errores de validación"
         )
     )
+
+    errores.extend(
+    validar_fecha_fin_finalizado(
+        df,
+        "Formulario 8_Errores de validación"
+    )
+)
 
 
     errores.extend(
@@ -1409,6 +1476,20 @@ def validar_form9(df):
             "Formulario 9_Errores de validación"
         )
     )
+
+    errores.extend(
+    validar_estado_proyecto(
+        df,
+        "Formulario 9_Errores de validación"
+    )
+)
+
+    errores.extend(
+    validar_fecha_fin_finalizado(
+        df,
+        "Formulario 9_Errores de validación"
+    )
+)
 
     errores.extend(
         validar_catalogo(
