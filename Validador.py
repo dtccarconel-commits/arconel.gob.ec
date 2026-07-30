@@ -335,18 +335,24 @@ def validar_catalogo(df, columna, catalogo, nombre_form):
 
         valor = str(row[columna]).strip()
 
-        if valor and valor not in catalogo:
+        # Campo vacío
+        if valor == "":
+            errores.append({
+                **row.to_dict(),
+                "Formulario": nombre_form,
+                "Fila": i + 2,
+                "Error": f"{columna} es obligatorio"
+            })
+            continue
 
-            
-         errores.append(
-             {
-                 **row.to_dict(),
-                 "Formulario": nombre_form,
-                 "Fila": i + 2,
-                 "Error": f"valor inválido '{valor}' en {columna}"
-                 }
-                 )
-
+        # Valor fuera del catálogo
+        if valor not in catalogo:
+            errores.append({
+                **row.to_dict(),
+                "Formulario": nombre_form,
+                "Fila": i + 2,
+                "Error": f"valor inválido '{valor}' en {columna}"
+            })
 
     return errores
 
