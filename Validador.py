@@ -793,13 +793,6 @@ def validar_form3(df):
         )
     )
 
-    errores.extend(
-    validar_obligatorios(
-        df,
-        ["perm_amb"],
-        "Formulario 3_Errores de validación"
-    )
-)
 
     errores.extend(
     validar_fechas(
@@ -1039,13 +1032,6 @@ def validar_form4(df):
         )
     )
 
-    errores.extend(
-    validar_obligatorios(
-        df,
-        ["perm_amb"],
-        "Formulario 4_Errores de validación"
-    )
-)
 
     errores.extend(
     validar_fechas(
