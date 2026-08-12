@@ -191,7 +191,38 @@ def validar_errores_excel(ruta_excel):
     return errores
 
 
+def validar_distribuidora_archivo(
+    df,
+    distribuidora_seleccionada,
+    nombre_form
+):
 
+    errores = []
+
+    if distribuidora_seleccionada == "CNEL EP Oficina Central":
+        return errores
+
+    if "distribuidora" not in df.columns:
+        return errores
+
+    for i, row in df.iterrows():
+
+        valor = str(row["distribuidora"]).strip()
+
+        if valor != distribuidora_seleccionada:
+
+            errores.append({
+                **row.to_dict(),
+                "Formulario": nombre_form,
+                "Fila": i + 2,
+                "Error": (
+                    f"La distribuidora registrada '{valor}' "
+                    f"no corresponde a la distribuidora que realiza "
+                    f"la carga ('{distribuidora_seleccionada}')"
+                )
+            })
+
+    return errores
 
 
 
@@ -1959,6 +1990,9 @@ if archivo:
                     if not validar_columnas(df, columnas):
                         st.error(f"❌ Error en {hoja}: columnas incorrectas")
                         st.stop()
+
+                    errores_distribuidora = validar_distribuidora_archivo(df,distribuidora_seleccionada,hoja)
+                    errores_totales.extend(errores_distribuidora)
 
                     if hoja in VALIDADORES:
                         errores_validacion = VALIDADORES[hoja](df)
