@@ -14,7 +14,7 @@ RUTA_OK_BASE = r"C:\Users\william.boconzaca\OneDrive - AGENCIA DE REGULACION Y C
 # Bibliotecas para campos en común que provienen de listas desplegables
 
 DISTRIBUIDORAS = [
-    'EE Santiago','CNEL EP Eficiencia Energética','CNEL EP Oficina Central','CNEL EP UN Bolívar',
+    'EE Prueba','CNEL EP Eficiencia Energética','CNEL EP Oficina Central','CNEL EP UN Bolívar',
     'CNEL EP UN El Oro','CNEL EP UN Esmeraldas','CNEL EP UN Guayaquil',
     'CNEL EP UN Guayas Los Ríos','CNEL EP UN Los Ríos','CNEL EP UN Manabí',
     'CNEL EP UN Milagro','CNEL EP UN Santa Elena','CNEL EP UN Santo Domingo',
@@ -101,7 +101,7 @@ TIPO_PROYECTO=[
     ]
 
 CLAVES_DISTRIBUIDORAS = {
-    "EE Santiago": "clave001",
+    "EE Prueba": "clave001",
     "CNEL EP Eficiencia Energética": "clave023",
     "CNEL EP Oficina Central": "clave002",
     "CNEL EP UN Bolívar": "clave003",
@@ -1849,7 +1849,7 @@ if archivo:
     EMPRESAS = [
         "CNEL EP Oficina Central",
         "CNEL EP Eficiencia Energética",
-        "EE Santiago",
+        "EE Prueba",
         "CNEL EP UN Bolívar",
         "CNEL EP UN El Oro",
         "CNEL EP UN Esmeraldas",
