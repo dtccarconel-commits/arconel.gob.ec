@@ -1,8 +1,6 @@
 streamlit
 pandas
-numpy
 openpyxl
 requests
+numpy
 python-dateutil
-pytz
-tzdata
