@@ -6,4 +6,3 @@ requests
 python-dateutil
 pytz
 tzdata
-et-xmlfile
