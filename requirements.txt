@@ -1,6 +1,7 @@
-streamlit==1.63.0
-pandas==3.0.5
+streamlit==1.58.0
+pandas==3.0.4
 openpyxl==3.1.5
 requests==2.34.2
-numpy==2.5.1
+numpy==2.5.0
 python-dateutil==2.9.0.post0
+pyarrow==24.0.0
