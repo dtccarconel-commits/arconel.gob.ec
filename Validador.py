@@ -187,7 +187,7 @@ def validar_errores_excel(ruta_excel):
                         "Fila": celda.row,
                         "Error": f"Dato inválido, error en la fórmula de Excel: {celda.value} en {celda.coordinate}"
                     })
-
+    wb.close
     return errores
 
 
