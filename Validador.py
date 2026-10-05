@@ -5,9 +5,8 @@ import shutil
 import requests
 import base64
 import re
+import tempfile
 from openpyxl import load_workbook
-
-RUTA_TEMP = "temp.xlsx"
 
 RUTA_OK_BASE = r"C:\Users\william.boconzaca\OneDrive - AGENCIA DE REGULACION Y CONTROL DE ELECTRICIDAD\Validador formularios\Archivos válidos"
 
@@ -1906,10 +1905,18 @@ if archivo:
         st.stop()
 
 
+
 if archivo:
 
-    with open(RUTA_TEMP, "wb") as f:
-        f.write(archivo.getbuffer())
+    tmp = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".xlsx"
+    )
+
+    tmp.write(archivo.getbuffer())
+    tmp.close()
+
+    RUTA_TEMP = tmp.name
 
     if st.button("🔍 Validar"):
 
